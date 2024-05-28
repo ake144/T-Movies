@@ -1,9 +1,12 @@
 import React from 'react'
+import Movies from '@/components/tv/movies/content'
 
-function Movies() {
+function MoviePage() {
   return (
-    <div>Movies</div>
+      <>
+    <Movies />
+     </>
   )
 }
 
-export default Movies
+export default MoviePage

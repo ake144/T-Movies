@@ -28,7 +28,7 @@ export const  {handlers, signIn, signOut, auth} = NextAuth({
             throw new Error("User not found.");
         }
         const passwordMatch = await bcrypt.compare(password, user.password);
-        if (passwordMatch) {
+        if (user && passwordMatch) {
             return user;
         } else {
             throw new Error("Password is incorrect.");
@@ -40,7 +40,9 @@ export const  {handlers, signIn, signOut, auth} = NextAuth({
   callbacks: {
     async session({ session, token, user }) {
       // Send properties to the client, like an access_token from a provider.
+    if(user){
       session.user = user;
+    }
       return session;
     },
     async jwt({ token, user }) {
@@ -52,8 +54,5 @@ export const  {handlers, signIn, signOut, auth} = NextAuth({
       return token;
     }
   },
-  pages: {
-    signIn: "/login",
-  }
 
 });

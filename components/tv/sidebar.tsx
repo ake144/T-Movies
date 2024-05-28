@@ -31,7 +31,7 @@ const handleChange = (event: React.SyntheticEvent, newValue: number) => {
 
   return (
     <Box display="flex" flexDirection="column" height="100%">
-      <Box p={3} marginTop="50px" marginBottom="70px" color='white'>
+      <Box p={3} marginTop="50px" marginBottom="70px" color='white' marginLeft='50px'>
         <Link href="/tv" passHref>
           <ArrowBackIosIcon style={{ fontWeight: 600, textDecoration: "none", color: "inherit" }} />
         </Link>

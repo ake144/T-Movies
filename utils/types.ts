@@ -28,3 +28,4 @@ export const ChannelSchema = object({
     .min(1, "Name is required")
     .max(32, "Name must be less than 32 characters"),
 })
+
