@@ -16,21 +16,31 @@ model Movie {
   typeId      Int
   categoryId  Int
   videoUrl    String
+
+  channel     Channel  @relation(fields: [channelId], references: [id])
+  type        Type     @relation(fields: [typeId], references: [id])
+  category    Category @relation(fields: [categoryId], references: [id])
 }
 
 model Channel {
   id   Int    @id @default(autoincrement())
   name String
+
+  movie  Movie[]
 }
 
 model Type {
   id   Int    @id @default(autoincrement())
   name String
+
+  movie  Movie[]
 }
 
 model Category {
   id   Int    @id @default(autoincrement())
   name String
+
+  movie  Movie[]
 }
 
 model User {

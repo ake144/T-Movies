@@ -63,8 +63,8 @@ export default function DashboardTopNav({ children }: { children: ReactNode }) {
   );
 
   return (
-    <Box  sx={{width:'100%',}} padding={2} >
-      <AppBar position="relative">
+    <Box  sx={{width:'100%',}} padding={-1} >
+      <AppBar sx={{background:'#0b0b1d'}} position="relative">
         <Toolbar>
           <IconButton
             edge="start"
@@ -73,7 +73,6 @@ export default function DashboardTopNav({ children }: { children: ReactNode }) {
             onClick={toggleDrawer(true)}
             sx={{ mr: 2, }}
           >
-            <MenuIcon />
           </IconButton>
           <Typography variant="h6" sx={{ flexGrow: 1, marginLeft:'30px' }}>
             {pathname}

@@ -19,7 +19,6 @@ const SidebarContainer = styled(Box)(({ theme }) => ({
 
 const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
   const session = null; // Declare the 'session' variable if you need authentication handling
-
   return (
     <SidebarContainer>
       <SessionProvider session={session}>

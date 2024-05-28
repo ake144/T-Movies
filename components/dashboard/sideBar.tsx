@@ -1,4 +1,5 @@
-'use client'
+'use client';
+
 import React from 'react';
 import {
   Drawer,
@@ -8,7 +9,9 @@ import {
   ListItemText,
   Divider,
   Typography,
-  Box
+  Box,
+  useMediaQuery,
+  useTheme
 } from '@mui/material';
 import {
   Home as HomeIcon,
@@ -27,6 +30,8 @@ const drawerWidth = 240;
 
 export default function DashboardSideBar() {
   const pathname = usePathname();
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
   return (
     <Drawer
@@ -38,32 +43,32 @@ export default function DashboardSideBar() {
       }}
     >
       <Box sx={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
-        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent:'center', px: 1, py: 1, borderBottom: 1, borderColor: 'divider' }}>
+        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', px: 1, py: 1, borderBottom: 1, borderColor: 'divider' }}>
           <Box>
-            <ForestOutlinedIcon    />
+            <ForestOutlinedIcon />
           </Box>
           <Typography variant="h6" noWrap component={Link} href="/">
             T-Movie
           </Typography>
         </Box>
         <List>
-          <ListItem button component={Link} href="/dashboard" selected={pathname === "/dashboard"}>
+          <ListItem component={Link} href="/admin" selected={pathname === "/admin"}>
             <ListItemIcon>
               <HomeIcon />
             </ListItemIcon>
-            <ListItemText primary="Dashboard" />
+            {!isMobile && <ListItemText primary="Dashboard" />}
           </ListItem>
-          <ListItem button component={Link} href="/dashboard/channel" selected={pathname === "/dashboard/posts"}>
+          <ListItem component={Link} href="/admin/channel" selected={pathname === "/admin/channel"}>
             <ListItemIcon>
               <FolderIcon />
             </ListItemIcon>
-            <ListItemText primary="Channel" />
+            {!isMobile && <ListItemText primary="Channel" />}
           </ListItem>
-          <ListItem button component={Link} href="/dashboard/program" selected={pathname === "/dashboard/finance"}>
+          <ListItem component={Link} href="/admin/program" selected={pathname === "/admin/program"}>
             <ListItemIcon>
               <ImagePlayIcon />
             </ListItemIcon>
-            <ListItemText primary="Program" />
+            {!isMobile && <ListItemText primary="Program" />}
           </ListItem>
         </List>
       </Box>

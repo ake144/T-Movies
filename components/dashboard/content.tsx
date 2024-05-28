@@ -20,31 +20,7 @@ const DashboardPage: FC = () => {
   const [programTypes, setProgramTypes] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
 
-//   useEffect(() => {
-//     socket.on('updateCounts', data => {
-//       setUserCount(data.userCount);
-//       setProgramCount(data.programCount);
-//       setChannelCount(data.channelCount);
-//     });
 
-//     socket.on('updateProgramCategories', data => {
-//       setProgramCategories(data);
-//     });
-
-//     socket.on('updateProgramTypes', data => {
-//       setProgramTypes(data);
-//     });
-
-//     return () => {
-//       socket.off('updateCounts');
-//       socket.off('updateProgramCategories');
-//       socket.off('updateProgramTypes');
-//     };
-//   }, []);
-
-//   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
-//     setSearchQuery(event.target.value);
-//   };
 const filteredProgramCategories = [
     { name: 'Comedy', count: 10 },
     { name: 'Drama', count: 20 },
