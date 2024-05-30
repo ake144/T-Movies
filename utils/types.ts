@@ -1,4 +1,21 @@
 import { object, string } from "zod"
+
+import { z } from 'zod';
+
+export const ProgramSchema = z.object({
+  id: z.number(),
+  title: z.string().min(1, 'Title is required'),
+  duration: z.number().positive('Duration must be a positive number'),
+  description: z.string().min(5, 'Description is required'),
+  videoUrl: z.string().url('Invalid URL'),
+  channelId: z.number().min(1, 'Channel is required'),
+  typeId: z.number().min(1, 'Type is required'),
+  categoryId: z.number().min(1, 'Category is required'),
+});
+
+export type ProgramSchemaType = z.infer<typeof ProgramSchema>;
+
+
  
 export const signUpSchema = object({
   username: string({ required_error: "Username is required" })

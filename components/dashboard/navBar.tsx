@@ -80,9 +80,11 @@ export default function DashboardTopNav({ children }: { children: ReactNode }) {
           <IconButton color="inherit">
             <Brightness4 />
           </IconButton>
+          <Link href="/profile">
           <IconButton color="inherit">
             <AccountCircle />
           </IconButton>
+          </Link>
         </Toolbar>
       </AppBar>
       {/* <Drawer

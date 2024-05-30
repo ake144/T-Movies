@@ -6,6 +6,7 @@ import { z } from 'zod';
 import { useForm, Controller, SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { createChannel } from '@/utils/actions/createChannel';
+import { useRouter } from 'next/navigation';
 
 // Define the Zod schema for channel validation
 const ChannelSchema = z.object({
@@ -16,6 +17,7 @@ type ChannelSchemaType = z.infer<typeof ChannelSchema>;
 
 function AddChannel() {
   const [channelName,setChannelName] = useState("")
+  const router = useRouter();
 
   const { control, handleSubmit, formState: { errors } } = useForm<ChannelSchemaType>({
     resolver: zodResolver(ChannelSchema)
@@ -30,6 +32,11 @@ function AddChannel() {
       console.error('Error:', error);
     }
   };
+
+  const handleCancel = () => {
+    setChannelName('')
+    router.push('/admin/channel');
+  }
 
   return (
     <Box
@@ -98,7 +105,7 @@ function AddChannel() {
             <Button
               variant="outlined"
               sx={{ width: '30%', fontWeight: 'bold', height: '50px', border: '1px solid', color: 'black' }}
-              onClick={() => setChannelName('')} // Clear input on cancel
+              onClick={handleCancel} // Clear input on cancel
             >
               Cancel
             </Button>

@@ -26,6 +26,7 @@ const ProgramSchema = z.object({
   description: z.string().min(5, 'Description is required'),
   categoryId: z.number().min(1, 'Category is required'),
   channelId: z.number().min(1, 'Channel is required'),
+  imageUrl: z.string().url('Invalid URL'),
   typeId: z.number().min(1, 'Type is required')
 });
 
@@ -238,7 +239,27 @@ const AddProgram = () => {
                 )}
               />
             </Grid>
-          </Grid>
+         
+          <Grid item xs={12} sm={6}>
+              <Typography variant='caption' sx={{ textAlign: 'center', mb: 3 }}>
+                Image URL
+              </Typography>
+              <Controller
+                name="imageUrl"
+                control={control}
+                defaultValue=""
+                render={({ field }) => (
+                  <TextField
+                    {...field}
+                    variant="filled"
+                    fullWidth
+                    error={!!errors.imageUrl}
+                    helperText={errors.imageUrl?.message}
+                  />
+                )}
+              />
+            </Grid>
+            </Grid>
           <Box
             sx={{
               display: 'flex',

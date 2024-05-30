@@ -4,6 +4,7 @@
 import prisma from "@/lib/db"
 
 interface ProgramSchema {
+    id?    :  number
     title     :  string
     duration  :  number
     description : string
@@ -35,3 +36,58 @@ export async function createProgram(data:ProgramSchema) {
   }
     
 }
+
+export async function fetchPrograms(){
+    try{
+        const programs = await prisma.movie.findMany();
+        console.log('programs fetched:', programs);
+        return programs.map(program => ({ ...program, isActive: true }));;
+    }
+    catch(e){
+        throw new Error('an Error fetching programs')
+    }
+
+}
+
+export async function deletePrograms(id:number){
+    try{
+        const program = await prisma.movie.delete({
+            where:{
+                id
+            }
+        })
+        console.log("program deleted", program)
+    }
+    catch(error){
+        console.log("Error deleting program", error)
+        throw new Error("error deleting program")
+    }
+
+}
+
+export async function updatePrograms(id:number, data:ProgramSchema) {
+    try{
+        const program = await prisma.movie.update({
+            where:{
+                id:data.id
+            },
+            data:{
+                title:data.title,
+                duration : data.duration,
+                description: data.description,
+                channelId:data.channelId,
+                typeId:data.typeId,
+                categoryId: data.categoryId,
+                videoUrl: data.videoUrl
+            }
+        })
+        console.log("program updated", program)
+
+    }
+    catch(error){
+        console.log("Error updating program", error)
+        throw new Error("error updating program")
+    }
+  
+}
+
