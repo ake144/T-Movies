@@ -40,7 +40,9 @@ const handleChange = (event: React.SyntheticEvent, newValue: number) => {
         value={value}
         onChange={handleChange}
         orientation="vertical"
-        sx={{ }}
+        sx={{ 
+          
+        }}
       >
         {tabs.map((tab, index) => (
           <Tab key={index}  sx={{color:'white'}} icon={tab.icon} />

@@ -28,33 +28,36 @@ const SidebarContainer = styled(Box)(({ theme }) => ({
   color: '#ffffff',
   display: 'flex',
   flexDirection: 'column',
+  backgroundColor: '#14142b',
+  overflow: 'auto',
+  scrollbarWidth:'none'
 }));
 
-const SelectedListItem = styled(ListItem)(({ theme }) => ({
-  backgroundColor: '#1f1f3d',
+const SelectedListItem = styled(ListItem)(({ theme, selected }) => ({
   '&:hover': {
     backgroundColor: '#2f2f5d',
   },
-  paddingBottom:'15px'  // Add margin to create gap between list items
+  marginBottom: '2px',
+  transition: 'background-color 0.3s',
 }));
 
 const Sidebar = () => {
   const [selectedChannel, setSelectedChannel] = useState(channels[0].id);
 
-  const handleChannelClick = (id: number) => {
+  const handleChannelClick = (id: React.SetStateAction<number>) => {
     setSelectedChannel(id);
   };
 
   return (
     <SidebarContainer>
-      <List sx={{ marginTop: '45px', marginBottom: '16px' }}>
+      <List sx={{ marginTop: '5px', marginBottom: '6px' }}>
         {channels.map((channel) => (
           <SelectedListItem
             key={channel.id}
             selected={selectedChannel === channel.id}
             onClick={() => handleChannelClick(channel.id)}
           >
-            <ListItemIcon sx={{ color: selectedChannel === channel.id ? '#ffffff' : '#a9a9c4' }}>
+            <ListItemIcon sx={{ color: selectedChannel === channel.id ? '#ffffff' : '#a9a9c4',   borderRadius: '50%', backgroundColor: selectedChannel === channel.id ?  '#1f1f3d' : 'transparent', height:'70px',width:'70px',alignItems:'center',justifyContent:'center'}}>
               {channel.icon}
             </ListItemIcon>
             <ListItemText primary={<Typography sx={{ color: selectedChannel === channel.id ? '#ffffff' : '#a9a9c4' }}>{channel.name}</Typography>} />

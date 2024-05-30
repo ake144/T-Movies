@@ -3,19 +3,20 @@
 
 import React from 'react';
 import { Box, Typography, Grid } from '@mui/material';
-import Sidebar  from './contentSidebar';
-import MediaTabs from './bottomside';
-
+import Sidebar from './contentSidebar';
+import MediaTabs from './bottomside'; // Ensure this path is correct
+import Header from './upperContent'
 
 const Content = () => {
   return (
-    <Box sx={{ height: '100vh', width: '100%', display: 'flex', flexDirection: 'column' }}>
+    <Box sx={{ height: '100vh', width: '100%', display: 'flex', flexDirection: 'column', backgroundColor: '#1c1c3b', color: '#ffffff' }}>
       <Grid container sx={{ flex: 1 }}>
         <Grid item xs={12} md={3} sx={{ display: 'flex', flexDirection: 'column' }}>
           <Sidebar />
         </Grid>
         <Grid item xs={12} md={9} sx={{ display: 'flex', flexDirection: 'column' }}>
           <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', padding: 2 }}>
+            <Header />
             <Typography variant="h4">Now Playing</Typography>
             <Typography variant="h6">Grey's Anatomy</Typography>
             <Typography variant="body1">
@@ -28,7 +29,6 @@ const Content = () => {
         </Grid>
       </Grid>
     </Box>
-
   );
 };
 

@@ -17,6 +17,7 @@ import { useForm, Controller, SubmitHandler } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { createProgram } from '@/utils/actions/createProgram'; // Import the server action
+import { useRouter } from 'next/navigation';
 
 // Zod schema for form validation
 const ProgramSchema = z.object({
@@ -33,6 +34,7 @@ const ProgramSchema = z.object({
 type ProgramSchemaType = z.infer<typeof ProgramSchema>;
 
 const AddProgram = () => {
+  const router = useRouter();
   const { control, handleSubmit, formState: { errors },reset } = useForm<ProgramSchemaType>({
     resolver: zodResolver(ProgramSchema)
   });
@@ -150,6 +152,7 @@ const AddProgram = () => {
                     fullWidth
                     error={!!errors.duration}
                     helperText={errors.duration?.message}
+                    onChange={(e) => field.onChange((e.target as HTMLInputElement).valueAsNumber)}
                   />
                 )}
               />
@@ -271,6 +274,7 @@ const AddProgram = () => {
               variant="outlined"
               sx={{ width: '90px', height: '35px', marginLeft: '10px', border: '2px solid', color: 'black' }}
               onClick={() => {
+                router.push('/admin');
                 // Add logic to clear the form or navigate away
               }}
             >

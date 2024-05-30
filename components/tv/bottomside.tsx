@@ -1,10 +1,10 @@
-// components/MediaTabs.js
 import React, { useState } from 'react';
-import { AppBar, Tabs, Tab, Box, Typography } from '@mui/material';
+import { Tabs, Tab, Box, Typography } from '@mui/material';
 import LiveTvIcon from '@mui/icons-material/LiveTv';
 import MovieIcon from '@mui/icons-material/Movie';
 import TvIcon from '@mui/icons-material/Tv';
 import SportsIcon from '@mui/icons-material/Sports';
+import Link from 'next/link';
 
 const TabPanel = (props: { [x: string]: any; children: any; value: any; index: any; }) => {
   const { children, value, index, ...other } = props;
@@ -33,28 +33,70 @@ const MediaTabs = () => {
     setValue(newValue);
   };
 
+  const tabStyle = {
+    border: '2px solid #2f2f5d',
+    borderRadius: '8px',
+    
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: '180px',
+    mx: '4px',
+    marginLeft: '14px',
+
+    height: '220px',
+    color: '#ffffff',
+    backgroundColor: '#2f2f5d',
+    display: 'flex',
+    flexDirection: 'column'
+  };
+
+  const tabLabelStyle = {
+    marginTop: '16px',
+    fontSize: '14px',
+  };
+
   return (
-    <div>
-            <Tabs
-          value={value}
-          onChange={handleChange}
-          indicatorColor="primary"
-          textColor="primary"
-          variant="fullWidth"    
-          aria-label="media tabs"
-        >
-          <Box   sx={{ border:'2px solid',alignItems:'center', justifyContent:'center',width:'150px',mx:'9px',marginLeft:'64px',height:'220px' }}>
-             <Tab sx={{ backgroundColor: '#2f2f5d',justifyContent:'center'}} label="Live TV's" href='/tv/live' icon={<LiveTvIcon />} />
-          </Box> 
-          <Box   sx={{ border:'2px solid',alignItems:'center', justifyContent:'center',width:'150px',mx:'4px',marginLeft:'64px',height:'220px' }}>          <Tab label="Movies" href='/tv/movies' icon={<MovieIcon />} />
-          </Box>
-          <Box   sx={{ border:'2px solid',alignItems:'center', justifyContent:'center',width:'150px',mx:'4px',marginLeft:'64px',height:'220px' }}>          <Tab label="TV Shows" href='/tv/program' icon={<TvIcon />} />
-          </Box>
-          <Box   sx={{ border:'2px solid',alignItems:'center', justifyContent:'center',width:'150px',mx:'4px',marginLeft:'64px',height:'220px' }}>          <Tab label="Sports" href='/tv/sport' icon={<SportsIcon />} />
-          </Box>
-        </Tabs>
-  
-    </div>
+    <Box display="flex" justifyContent="center" alignItems="center">
+      <Tabs
+        value={value}
+        onChange={handleChange}
+        indicatorColor="primary"
+        textColor="primary"
+        variant="fullWidth"
+        aria-label="media tabs"
+        TabIndicatorProps={{ style: { display: 'none' } }}
+        sx={{ display: 'flex', justifyContent: 'center' }}
+      >
+        <Link href="/tv/live">
+        <Box sx={tabStyle}>
+          <LiveTvIcon fontSize="large" />
+          <Typography sx={tabLabelStyle}>Live TV's</Typography>
+          <Typography variant="body2">+5000 Channels</Typography>
+        </Box>
+        </Link>
+        <Link href="/tv/movies">
+        <Box sx={tabStyle}>
+          <MovieIcon fontSize="large" />
+          <Typography sx={tabLabelStyle}>Movies</Typography>
+          <Typography variant="body2">+500 Movies</Typography>
+        </Box>
+        </Link>
+        <Link href="/tv/tvshows">
+        <Box sx={tabStyle}>
+          <TvIcon fontSize="large" />
+          <Typography sx={tabLabelStyle}>TV Shows</Typography>
+          <Typography variant="body2">+900 Series</Typography>
+        </Box>
+        </Link>
+        <Link href="/tv/sports">
+        <Box sx={tabStyle}>
+          <SportsIcon fontSize="large" />
+          <Typography sx={tabLabelStyle}>Sports</Typography>
+          <Typography variant="body2">+200 Channels</Typography>
+        </Box>
+        </Link>
+      </Tabs>
+    </Box>
   );
 };
 
