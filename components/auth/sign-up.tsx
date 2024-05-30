@@ -30,11 +30,11 @@ export function SignUpPage() {
     try {
       const user = await createUser(username, email, password);
       notifySuccess("User created successfully");
-      if (user.role === 'admin') {
-        router.push('/admin');
-      } else {
-        router.push('/dashboard');
-      }
+      // if (user.role === 'admin') {
+      //   router.push('/admin');
+      // } else {
+      //   router.push('/dashboard');
+      // }
       setUsername("");
       setEmail("");
       setPassword("");

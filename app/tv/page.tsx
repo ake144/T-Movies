@@ -1,4 +1,4 @@
-// pages/index.js
+
 import React from 'react';
 import { Box } from '@mui/material';
 import Content from '@/components/tv/content';

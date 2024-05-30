@@ -9,12 +9,12 @@ function Movies() {
   <>
   <Box>
     <Box  sx={{}}>
-        <Header />
+      <Header />
     </Box>
     <Grid sx={{ flexGrow: 1, paddingBottom:'30px' }} container spacing={2}>
       <Grid item xs={12}>
         <Grid container justifyContent="center" spacing={2}>
-          {[0, 1, 2].map((value) => (
+          {[0, 1, 2,3].map((value) => (
             <Grid key={value} item>        
                <HungerGameCard />
             </Grid>

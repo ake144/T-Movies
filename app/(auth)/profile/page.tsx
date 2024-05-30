@@ -1,40 +1,27 @@
-// app/pages/profile.tsx
+// pages/profile.js
+import { LogOut } from '@/components/auth/logout-form';
+import React from 'react';
+import { getServerSession } from 'next-auth';
+import authOptions from '@/lib/auth';
 
-import { LogOut } from '@/components/auth/logout-form'
-import React from 'react'
-import { auth } from '@/auth'
-import { getSession } from "next-auth/react";
+const ProfilePage = async () => {
+  const session = await getServerSession(authOptions);
+  const user = session?.user;
 
-
-interface User {
-    email: string;
-    role: string | null;
-    username: string;
-    password: string;
+  // Handle the case where user is undefined
+  if (!user) {
+    return (
+      <div>
+        <p>User not found. Please log in.</p>
+      </div>
+    );
   }
 
-async function ProfilePage() {
-      
-    const session = await auth();
+  return (
+    <div>
+      <LogOut user={user} />
+    </div>
+  );
+};
 
-  console.log(session)
-    if (session){
-      const user = session.user as User;
-        return (
-            <div >
-            <LogOut user={user} />
-            </div>
-        )
-    }
-    else {
-        return (
-            <div>
-                <p>Not logged in</p>
-                <a href="/login">Login</a>
-            </div>
-        )
-    }
-
-}
-
-export default ProfilePage
+export default ProfilePage;

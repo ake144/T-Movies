@@ -8,6 +8,7 @@ import { toast, ToastContainer, Slide } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Link from "next/link";
 import { useRouter } from 'next/navigation';
+import { signIn } from "next-auth/react";
 
 
 
@@ -30,14 +31,15 @@ export function LoginPage() {
     }
 
     try {
-     const user =  await loginUser(email, password);
+        const res = await signIn('credentials', {
+            redirect: false,
+            email,
+            password,
+        });
+     console.log('res', res)
+
       notifySuccess("Logged in successfully"); 
-     if (user.role === 'admin') {
-        router.push('/admin');
-      } else {
-        router.push('/tv');
-      }
-      
+      router.push('/admin');
       setEmail("");
       setPassword("");
     } catch (err:any) {

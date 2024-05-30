@@ -2,6 +2,7 @@ import React from 'react';
 import DashboardTopNav from '@/components/dashboard/navBar';
 import DashboardSideBar from "@/components/dashboard/sideBar";
 import { Box, CssBaseline } from '@mui/material';
+import Provider from '../sessionProvider';
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -45,7 +46,9 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
               borderColor: 'divider',
             }}
           >
-            {children}
+            <Provider>
+                  {children}
+            </Provider>
           </Box>
           </DashboardTopNav>
         </Box>

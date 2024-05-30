@@ -1,16 +1,23 @@
-// app/components/auth/logout-form.tsx
+'use client';
 
-import { Avatar, Box, Typography } from "@mui/material"
-import { signOut } from "next-auth/react"
- 
+import { Avatar, Box, Typography } from "@mui/material";
+import { signOut } from "next-auth/react";
+import { useRouter } from "next/navigation";
+
 interface User {
-    email: string;
-    role: string | null;
-    username: string;
-    password: string;
-  }
-  
+  email: string;
+  role: string | null;
+  username: string;
+
+}
+
 export function LogOut({ user }: { user: User }) {
+  const router = useRouter();
+
+  const handleLogout = async () => {
+    await signOut();
+    router.push('/login');
+  };
 
   return (
     <Box
@@ -43,7 +50,7 @@ export function LogOut({ user }: { user: User }) {
           variant="h6" 
           color="error" 
           sx={{ textAlign: 'center', cursor: 'pointer', marginTop: 2 }} 
-          onClick={() => signOut()}
+          onClick={handleLogout}
         >
           LOGOUT
         </Typography>

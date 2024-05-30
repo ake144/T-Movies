@@ -1,45 +1,11 @@
-// app/page.tsx
-import { Box, Container, Typography } from "@mui/material";
-import { SignUpPage } from "../components/auth/sign-up";
-import { ThemeProvider, createTheme } from '@mui/material/styles';
-import darkTheme from '../utils/theme';
-import CssBaseline from '@mui/material/CssBaseline';
-import  {auth} from '@/auth';
-import { LoginPage } from "@/components/auth/login-form";
-interface User {
-  email: string;
-  role: string | null;
-  username: string;
-  password: string;
-}
+import React from 'react'
+import { LoginPage }  from '@/components/auth/login-form'
+import { Box, Typography } from '@mui/material';
 
-const Home = async () => {
-  const session = await auth();
-  
-  if (session) {
-    const user = session.user as User;
 
-    if (user.role === 'ADMIN') {
-      return {
-        redirect: {
-          destination: '/dashboard',
-          permanent: false,
-        },
-      };
-    } else {
-      return {
-        redirect: {
-          destination: '/movies',
-          permanent: false,
-        },
-      };
-    }
-  }
-
+function page() {
   return (
-    <Container>
-      <ThemeProvider theme={darkTheme}>
-        <CssBaseline />
+    <div>
         <Box
           display="flex"
           justifyContent="space-between"
@@ -76,9 +42,9 @@ const Home = async () => {
             <LoginPage  />
           </Box>
         </Box>
-      </ThemeProvider>
-    </Container>
-  );
+
+    </div>
+  )
 }
 
-export default Home;
+export default page

@@ -1,22 +1,26 @@
 'use server'
 
 import prisma from '../../lib/db';
-import { randomBytes, pbkdf2Sync } from 'crypto';
+import bcrypt from 'bcryptjs';
 
 export async function createUser(username: string, email: string, password: string) {
   try {
-    // Generate a salt
-    const salt = randomBytes(16).toString('hex');
+     
+    const existingUser = await prisma.user.findUnique({
+      where: { email },
+    });
 
+    if (existingUser) {
+      throw new Error('User already exists');
+    }
     // Hash the password with the salt
-    const hashedPassword = pbkdf2Sync(password, salt, 1000, 64, 'sha512').toString('hex');
+    const hashedPassword = await bcrypt.hash(password, 10);
 
-    // Store the salt and the hashed password
     const user = await prisma.user.create({
       data: {
         username,
         email,
-        password: `${salt}:${hashedPassword}`,
+        password: hashedPassword,
       },
     });
 

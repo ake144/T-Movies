@@ -16,10 +16,31 @@ model Movie {
   typeId      Int
   categoryId  Int
   videoUrl    String
+  imageUrl    String?
+
+  watchLater WatchLater[]
+  favorites Favorites[]
 
   channel     Channel  @relation(fields: [channelId], references: [id])
   type        Type     @relation(fields: [typeId], references: [id])
   category    Category @relation(fields: [categoryId], references: [id])
+}
+
+model WatchLater {
+  id      Int      @id @default(autoincrement())
+  userId  Int
+  movieId Int
+  user    User     @relation(fields: [userId], references: [id])
+  movie   Movie    @relation(fields: [movieId], references: [id])
+}
+
+
+model Favorites {
+  id      Int      @id @default(autoincrement())
+  userId  Int
+  movieId Int
+  user    User     @relation(fields: [userId], references: [id])
+  movie   Movie    @relation(fields: [movieId], references: [id])
 }
 
 model Channel {
@@ -49,4 +70,7 @@ model User {
   password String
   role     String? @default("USER")
   username String
+
+  watchLater WatchLater[]
+  favorites Favorites[]
 }
