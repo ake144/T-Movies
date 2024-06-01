@@ -1,4 +1,4 @@
-import { object, string } from "zod"
+import { number, object, string } from "zod"
 
 import { z } from 'zod';
 
@@ -46,3 +46,22 @@ export const ChannelSchema = object({
     .max(32, "Name must be less than 32 characters"),
 })
 
+
+export type SearchParams = {
+   channelId? : number,
+   typeId?: number,
+   categoryId?:number
+
+}
+
+export interface MovieSchema {
+  id: number,
+  title: string;
+  duration: number;
+  description: string;
+  channelId: number;
+  typeId: number;
+  categoryId: number;
+  videoUrl: string;
+  imageUrl: string | null;
+}

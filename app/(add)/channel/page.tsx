@@ -6,7 +6,10 @@ import { z } from 'zod';
 import { useForm, Controller, SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { createChannel } from '@/utils/actions/createChannel';
-import { useRouter } from 'next/navigation';
+import { useRouter,redirect } from 'next/navigation';
+
+import { useSession } from 'next-auth/react'
+
 
 // Define the Zod schema for channel validation
 const ChannelSchema = z.object({
@@ -16,6 +19,14 @@ const ChannelSchema = z.object({
 type ChannelSchemaType = z.infer<typeof ChannelSchema>;
 
 function AddChannel() {
+
+
+  const { data: session } = useSession({
+    required: true,
+    onUnauthenticated() {
+        redirect('/api/auth/signin?callbackUrl=/channel')
+    }
+  })
   const [channelName,setChannelName] = useState("")
   const router = useRouter();
 

@@ -1,5 +1,4 @@
-// components/tv/Sidebar.js
-import React, { useState } from 'react';
+import React from 'react';
 import { List, ListItem, ListItemIcon, ListItemText, Typography, Box } from '@mui/material';
 import { styled } from '@mui/system';
 import {
@@ -9,6 +8,8 @@ import {
   Tv as TvIcon,
   Sports as SportsIcon,
 } from '@mui/icons-material';
+import { useRouter, useSearchParams, usePathname } from 'next/navigation';
+import Link from 'next/link';
 
 const channels = [
   { id: 1, name: 'FOX TV', icon: <HomeIcon /> },
@@ -30,7 +31,7 @@ const SidebarContainer = styled(Box)(({ theme }) => ({
   flexDirection: 'column',
   backgroundColor: '#14142b',
   overflow: 'auto',
-  scrollbarWidth:'none'
+  scrollbarWidth: 'none',
 }));
 
 const SelectedListItem = styled(ListItem)(({ theme, selected }) => ({
@@ -42,25 +43,40 @@ const SelectedListItem = styled(ListItem)(({ theme, selected }) => ({
 }));
 
 const Sidebar = () => {
-  const [selectedChannel, setSelectedChannel] = useState(channels[0].id);
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const selectedChannel = Number(searchParams.get('channelId'));
+  const selectedCategory = Number(searchParams.get('categoryId'))
 
-  const handleChannelClick = (id: React.SetStateAction<number>) => {
-    setSelectedChannel(id);
+  const handleChannelClick = (id: number) => {
+    router.push(`?categoryId=${selectedCategory}&channelId=${id}`);
   };
 
   return (
     <SidebarContainer>
-      <List sx={{ marginTop: '5px', marginBottom: '6px' }}>
+      <List>
         {channels.map((channel) => (
           <SelectedListItem
             key={channel.id}
             selected={selectedChannel === channel.id}
             onClick={() => handleChannelClick(channel.id)}
           >
-            <ListItemIcon sx={{ color: selectedChannel === channel.id ? '#ffffff' : '#a9a9c4',   borderRadius: '50%', backgroundColor: selectedChannel === channel.id ?  '#1f1f3d' : 'transparent', height:'70px',width:'70px',alignItems:'center',justifyContent:'center'}}>
+            <ListItemIcon
+              sx={{
+                color: selectedChannel === channel.id ? '#ffffff' : '#a9a9c4',
+                borderRadius: '50%',
+                backgroundColor: selectedChannel === channel.id ? '#1f1f3d' : 'transparent',
+                height: '70px',
+                width: '70px',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+            >
               {channel.icon}
             </ListItemIcon>
-            <ListItemText primary={<Typography sx={{ color: selectedChannel === channel.id ? '#ffffff' : '#a9a9c4' }}>{channel.name}</Typography>} />
+            <ListItemText
+              primary={<Typography sx={{ color: selectedChannel === channel.id ? '#ffffff' : '#a9a9c4' }}>{channel.name}</Typography>}
+            />
           </SelectedListItem>
         ))}
       </List>

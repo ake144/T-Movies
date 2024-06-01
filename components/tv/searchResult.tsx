@@ -1,21 +1,24 @@
-// app/search/SearchResults.tsx
 import * as React from 'react';
 import { List, ListItem, ListItemText, Paper, Typography } from '@mui/material';
+import { MovieSchema } from '@/utils/types';
+import Link from 'next/link';
 
 interface SearchResultsProps {
-  results: Array<{ id: number; title: string; description: string }>;
+  results: MovieSchema[];
 }
 
 const SearchResults: React.FC<SearchResultsProps> = ({ results }) => {
   return (
     <Paper style={{ marginTop: '1rem', padding: '1rem' }}>
-      <Typography variant="h6">Search Results</Typography>
+      <Typography variant="h6" sx={{color:''}}>Search Results</Typography>
       {results.length > 0 ? (
         <List>
-          {results.map((movie) => (
-            <ListItem key={movie.id}>
-              <ListItemText primary={movie.title} secondary={movie.description} />
-            </ListItem>
+          {results.map((movie: MovieSchema) => (
+            <Link href={movie.videoUrl} >
+                <ListItem key={movie.id}>
+                  <ListItemText primary={movie.title} secondary={movie.description} />
+                </ListItem>
+            </Link>
           ))}
         </List>
       ) : (

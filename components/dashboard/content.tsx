@@ -8,6 +8,9 @@ import { Group, LiveTv, Dvr } from '@mui/icons-material';
 import CustomPieChart from './Barchart'
 import CustomLineChart from './LinChart'
 import { PieChart, Pie,Legend, Tooltip, LineChart, Line, CartesianGrid, XAxis, YAxis } from 'recharts';
+import { channels, programs, users } from '@/utils/actions/count';
+import { set } from 'zod';
+import { ChannelSchema } from '@/utils/types';
 
 
 // const socket = io();
@@ -20,8 +23,7 @@ const DashboardPage: FC = () => {
   const [programTypes, setProgramTypes] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
 
-
-const filteredProgramCategories = [
+  const filteredProgramCategories = [
     { name: 'Comedy', count: 10 },
     { name: 'Drama', count: 20 },
     { name: 'Action', count: 30 },
@@ -36,6 +38,25 @@ const filteredProgramCategories = [
     { type: 'News', count: 40 },
     { type: 'Sports', count: 50 },
   ];
+
+  useEffect(() => {
+    const fetchUserCount = async () => {
+      try {
+        const totalUser = await users();
+        const totalProgram = await  programs();
+        const totalChannel = await channels();
+        setProgramCount(totalProgram ?? 0);
+        setChannelCount(totalChannel ?? 0);
+        setUserCount(totalUser ?? 0); // Set the number directly
+
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    fetchUserCount();
+  }, []);
+
 
 //   const filteredProgramCategories = programCategories.filter(category =>
 //     category.name.toLowerCase().includes(searchQuery.toLowerCase())
@@ -71,7 +92,7 @@ const filteredProgramCategories = [
               alignItems: 'right',
               justifyContent: 'right',
             }}>
-                    <Typography variant="h6">System Use</Typography>
+                    <Typography variant="h6">System User</Typography>
                     <Group sx={{ height: 50,  width: 50, opacity: 0.3, ml: 5 }} />  
             </Box> 
           <Box

@@ -2,17 +2,21 @@
 
 import { Box, TextField, Typography, Button, FormControl, FormHelperText } from "@mui/material";
 import React, { useState } from "react";
-import { signInSchema } from "../../utils/types"; // Import validation schema
-import loginUser from "../../utils/actions/login"; // Import loginUser action
+import { signInSchema } from "../../utils/types";
+import loginUser from "../../utils/actions/login"; 
 import { toast, ToastContainer, Slide } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Link from "next/link";
-import { useRouter } from 'next/navigation';
+import { useRouter,useSearchParams } from 'next/navigation';
 import { signIn } from "next-auth/react";
 
 
 
 export function LoginPage() {
+
+  const searchParams = useSearchParams();
+  const callbackUrl = searchParams.get('callbackUrl') || '/';
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState({ email: "", password: "" });
@@ -35,11 +39,12 @@ export function LoginPage() {
             redirect: false,
             email,
             password,
+            callbackUrl,
         });
      console.log('res', res)
 
       notifySuccess("Logged in successfully"); 
-      router.push('/admin');
+      router.push(callbackUrl);
       setEmail("");
       setPassword("");
     } catch (err:any) {

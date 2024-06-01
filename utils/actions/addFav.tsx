@@ -12,12 +12,12 @@ interface MovieSchema {
 
 
 
-export async function addMovieToFavorites(userId: number, movieId: number) {
+export async function addMovieToFavorites( movieId: number, userEmail: string) {
     try {
       const favoriteEntry = await prisma.favorites.create({
         data: {
-          userId,
           movieId,
+          userEmail 
         },
       });
       console.log("Movie added to Favorites list", favoriteEntry);
@@ -25,5 +25,15 @@ export async function addMovieToFavorites(userId: number, movieId: number) {
     } catch (error) {
       console.error('Error adding to Favorites', error);
       throw new Error("Error adding movie to Favorites");
+    }
+  }
+
+  export async function totalFavorites() {
+    try {
+      const favoriteCount = await prisma.favorites.findMany();
+      return favoriteCount.length;
+    } catch (error) {
+      console.error('Error counting favorites', error);
+      throw new Error("Error counting favorites");
     }
   }

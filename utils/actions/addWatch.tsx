@@ -10,12 +10,12 @@ interface MovieSchema {
   videoUrl: string;
 }
 
-export async function addMovieToWatchLater(userId: number, movieId: number) {
+export async function addMovieToWatchLater(movieId: number, userEmail: string) {
   try {
     const watchLaterEntry = await prisma.watchLater.create({
       data: {
-        userId,
         movieId,
+        userEmail
       },
     });
     console.log("Movie added to Watch Later list", watchLaterEntry);
@@ -23,5 +23,16 @@ export async function addMovieToWatchLater(userId: number, movieId: number) {
   } catch (error) {
     console.error('Error adding to Watch Later', error);
     throw new Error("Error adding movie to Watch Later");
+  }
+}
+
+
+export async function totalWatchLatter() {
+  try {
+    const favoriteCount = await prisma.watchLater.findMany();
+    return favoriteCount.length;
+  } catch (error) {
+    console.error('Error counting favorites', error);
+    throw new Error("Error counting favorites");
   }
 }

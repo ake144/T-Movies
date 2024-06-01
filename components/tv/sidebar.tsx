@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import { Box, Tabs, Tab } from "@mui/material";
-import {  useRouter } from "next/navigation";
+import {  useRouter, useSearchParams } from "next/navigation";
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import LiveTvIcon from '@mui/icons-material/LiveTv';
@@ -12,21 +12,18 @@ import { usePathname } from "next/navigation";
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 
 const tabs = [
-  { href: "/LiveWatch", label: "Live Watch", icon: <LiveTvIcon /> },
-  { href: "/favourite", label: "Favourite", icon: <FavoriteIcon /> },
-  { href: "/watchLater", label: "Watch Later", icon: <AccessTimeIcon /> }
+  { label: "Live Watch", icon: <LiveTvIcon /> },
+  { label: "Favourite", icon: <FavoriteIcon /> },
+  { label: "Watch Later", icon: <AccessTimeIcon /> }
 ];
 
 const DashboardSideBar: React.FC = () => {
+  const router = useRouter()
   const pathname = usePathname();
+  const searchParams = useSearchParams()
 
-const [value, setValue] = useState(() => {
-    const index = tabs.findIndex(tab => pathname === tab.href);
-    return index !== -1 ? index : 0;
-});
-
-const handleChange = (event: React.SyntheticEvent, newValue: number) => {
-    setValue(newValue);
+const handleChange = (event: React.SyntheticEvent, id: number) => {
+     router.push(`?categoryId=${id}`)    
 };
 
   return (
@@ -37,11 +34,13 @@ const handleChange = (event: React.SyntheticEvent, newValue: number) => {
         </Link>
       </Box>
       <Tabs
-        value={value}
         onChange={handleChange}
         orientation="vertical"
         sx={{ 
-          
+          padding:4,
+          marginTop: '20px',
+          gap:19,
+          marginBottom: '20px',
         }}
       >
         {tabs.map((tab, index) => (

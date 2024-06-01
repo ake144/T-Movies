@@ -28,18 +28,18 @@ model Movie {
 
 model WatchLater {
   id      Int      @id @default(autoincrement())
-  userId  Int
+  userEmail  String
   movieId Int
-  user    User     @relation(fields: [userId], references: [id])
+  user    User     @relation(fields: [userEmail], references: [email])
   movie   Movie    @relation(fields: [movieId], references: [id])
 }
 
 
 model Favorites {
   id      Int      @id @default(autoincrement())
-  userId  Int
+  userEmail  String
   movieId Int
-  user    User     @relation(fields: [userId], references: [id])
+  user    User     @relation(fields: [userEmail], references: [email])
   movie   Movie    @relation(fields: [movieId], references: [id])
 }
 

@@ -7,6 +7,8 @@ import WbSunnyIcon from '@mui/icons-material/WbSunny';
 import Link from 'next/link';
 import Modal from '@mui/material/Modal';
 import SearchPage from '@/components/tv/searchbar';
+import { useSearchParams } from 'next/navigation';
+
 
 const style = {
   position: 'absolute' as 'absolute',
@@ -25,6 +27,10 @@ const style = {
 };
 
 const Header = () => {
+  const searchParams = useSearchParams()
+  const selectedChannel = searchParams.get('channelId')
+  console.log('the channel is ', selectedChannel)
+
   const [value, setValue] = useState(0);
   const [open, setOpen] = useState(false);
 
@@ -43,7 +49,7 @@ const Header = () => {
   return (
     <>
         <Typography variant='h6' sx={{ paddingTop: '-10px',marginTop: '3px', marginBottom: '5px' }}>
-          Movies
+          Movies   : {selectedChannel}
         </Typography>
            <Box sx={{ display: 'flex',paddingTop: '-10px',top:'-1px',marginTop: '3px', marginBottom: '5px', alignItems: 'right', paddingLeft:'390px' }}>
             <WbSunnyIcon sx={{ marginRight: 1 }} />
