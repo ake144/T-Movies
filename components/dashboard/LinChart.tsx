@@ -1,28 +1,34 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { Box, Typography, List, ListItem, ListItemText, ListItemIcon } from '@mui/material';
-
-const data = [
-  { day: 'MON', A: 30, B: 20, C: 27, D: 18, E: 23 },
-  { day: 'TUE', A: 40, B: 30, C: 28, D: 19, E: 24 },
-  { day: 'WED', A: 50, B: 35, C: 35, D: 22, E: 28 },
-  { day: 'THU', A: 45, B: 32, C: 33, D: 24, E: 30 },
-  { day: 'FRI', A: 35, B: 27, C: 30, D: 20, E: 26 },
-  { day: 'SAT', A: 40, B: 33, C: 35, D: 22, E: 29 },
-  { day: 'SUN', A: 50, B: 40, C: 40, D: 25, E: 32 },
-];
-
-const legendData = [
-  { name: 'Category A', color: '#8884d8', value: 50 },
-  { name: 'Category B', color: '#82ca9d', value: 40 },
-  { name: 'Category C', color: '#ffc658', value: 40 },
-  { name: 'Category D', color: '#d0ed57', value: 25 },
-  { name: 'Category E', color: '#4daf4a', value: 32 },
-];
+import { channels, programs } from '@/utils/actions/count';
 
 const CustomLineChart = () => {
+  
+
+
+
+  const data = [
+    { day: 'MON', A: 30, B: 20, C: 27, D: 18, E: 23 },
+    { day: 'TUE', A: 40, B: 30, C: 28, D: 19, E: 24 },
+    { day: 'WED', A: 50, B: 35, C: 35, D: 22, E: 28 },
+    { day: 'THU', A: 45, B: 32, C: 33, D: 24, E: 30 },
+    { day: 'FRI', A: 35, B: 27, C: 30, D: 20, E: 26 },
+    { day: 'SAT', A: 40, B: 33, C: 35, D: 22, E: 29 },
+    { day: 'SUN', A: 50, B: 40, C: 40, D: 25, E: 32 },
+  ];
+  
+  const legendData = [
+    { name: 'Live TV', color: '#8884d8', value: 50 },
+    { name: 'Movies', color: '#82ca9d', value: 40 },
+    { name: 'TV Shows', color: '#ffc658', value: 40 },
+    { name: 'Sports', color: '#d0ed57', value: 25 },
+    { name: 'Popular', color: '#4daf4a', value: 32 },
+  ];
+  
+
   return (
     <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
       <ResponsiveContainer width="70%" height={300}>

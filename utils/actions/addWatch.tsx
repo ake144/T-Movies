@@ -41,3 +41,21 @@ export async function totalWatchLatter(userEmail?: string) {
     throw new Error("Error counting favorites");
   }
 }
+
+
+export async function getWatchLaterMovies(userEmail: string) {
+  try {
+    const movies = await prisma.watchLater.findMany({
+      where: {
+        userEmail: userEmail,
+      },
+      select: {
+        movie: true,
+      },
+    });
+    return movies.map((entry) => entry.movie);
+  } catch (error) {
+    console.error('Error fetching watch later movies:', error);
+    throw new Error('Error fetching watch later movies');
+  }
+}

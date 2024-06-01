@@ -109,3 +109,53 @@ export async function searchProgram(searchTerm: string) {
         throw new Error("Error fetching programs");
     }
 }
+
+
+
+export async function getSport(channelId:number, typeId:number){
+    try{
+        const programs = await prisma.movie.findMany({
+            where:{
+                channelId,
+                typeId
+            }
+        })
+        console.log('programs fetched:', programs);
+        return programs.map(program => ({ ...program, isActive: true }));;
+    }
+    catch(e){
+        throw new Error('an Error fetching programs')
+    }
+}
+
+export async function getLiveTv(channelId:number, typeId:number){
+    try{
+        const programs = await prisma.movie.findMany({
+            where:{
+                channelId,
+                typeId
+            }
+        })
+        console.log('programs fetched:', programs);
+        return programs.map(program => ({ ...program, isActive: true }));;
+    }
+    catch(e){
+        throw new Error('an Error fetching programs')
+    }
+}
+
+export async function getTvShow(channelId:number, typeId:number){
+    try{
+        const programs = await prisma.movie.findMany({
+            where:{
+                channelId,
+                typeId
+            }
+        })
+        console.log('programs fetched:', programs);
+        return programs.map(program => ({ ...program, isActive: true }));;
+    }
+    catch(e){
+        throw new Error('an Error fetching programs')
+    }
+}

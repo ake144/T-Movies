@@ -10,7 +10,7 @@ interface SearchResultsProps {
 const SearchResults: React.FC<SearchResultsProps> = ({ results }) => {
   return (
     <Paper style={{ marginTop: '1rem', padding: '1rem' }}>
-      <Typography variant="h6" sx={{color:''}}>Search Results</Typography>
+      <Typography variant="h6" sx={{ fontSize:'bold'}}>Search Results  from All Channel</Typography>
       {results.length > 0 ? (
         <List>
           {results.map((movie: MovieSchema) => (

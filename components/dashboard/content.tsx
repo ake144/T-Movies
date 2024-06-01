@@ -41,21 +41,24 @@ const DashboardPage: FC = () => {
   ];
 
   useEffect(() => {
-    const fetchUserCount = async () => {
+    const fetchCounts = async () => {
       try {
-        const totalUser = await users();
-        const totalProgram = await  programs();
-        const totalChannel = await channels();
-        setProgramCount(totalProgram ?? 0);
-        setChannelCount(totalChannel ?? 0);
-        setUserCount(totalUser ?? 0); // Set the number directly
+        const [userCount, movieCount, channelCount] = await Promise.all([
+          users(),
+          programs(),
+          channels()
+        ]);
+        setUserCount(userCount ?? 0);
+        setProgramCount(movieCount ?? 0);
+        setChannelCount(channelCount ?? 0);
 
+        console.log("Dashboard counts:", { userCount, movieCount, channelCount });
       } catch (error) {
-        console.log(error);
+        console.error("Error fetching counts:", error);
       }
     };
 
-    fetchUserCount();
+    fetchCounts();
   }, []);
 
 

@@ -42,3 +42,20 @@ export async function totalFavorites(userEmail?: string) {
     throw new Error("Error counting favorites");
   }
 }
+
+export async function getFavorites(userEmail: string) {
+  try {
+    const favorites = await prisma.favorites.findMany({
+      where: {
+        userEmail,
+      },
+      select:{
+        movie:true
+      }
+    });
+    return favorites;
+  } catch (error) {
+    console.error('Error getting favorites', error);
+    throw new Error("Error getting favorites");
+  }
+}

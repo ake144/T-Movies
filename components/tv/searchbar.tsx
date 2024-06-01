@@ -9,7 +9,7 @@ import { useEffect, useState } from 'react';
 import { MovieSchema } from '@/utils/types';
 
 export default function SearchPage() {
-  const [searchTerm, setSearchTerm] = useState('angle');
+  const [searchTerm, setSearchTerm] = useState('steve');
   const [results, setResults] = useState<MovieSchema[]>([]);
   const [isSearching, setIsSearching] = useState(false);
   const debouncedSearchTerm = useDebounce(searchTerm, 300);
@@ -21,24 +21,23 @@ export default function SearchPage() {
   const handleForm = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
-    const searchTerm = formData.get('search');
+    const searchTerm = formData.get('search') as string;
 
+    setSearchTerm(searchTerm);
     event.currentTarget.reset();
     event.currentTarget.focus();
   };
 
   useEffect(() => {
     const search = async () => {
-    
       try {
-        let results: React.SetStateAction<MovieSchema[]> = []
         setIsSearching(true);
         if (debouncedSearchTerm) {
-          const results = await searchMovies(searchTerm);
+          const searchResults: MovieSchema[] = await searchMovies(debouncedSearchTerm); 
+          setResults(searchResults); 
+        } else {
+          setResults([]);
         }
-        setIsSearching(false) 
-        setResults(results);
-
       } catch (error) {
         console.error(error);
       } finally {
@@ -48,7 +47,6 @@ export default function SearchPage() {
 
     search();
   }, [debouncedSearchTerm]);
-
   return (
     <Container>
       <Typography variant="h4" component="h1" gutterBottom>

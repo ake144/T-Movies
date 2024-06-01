@@ -17,6 +17,8 @@ const CustomPieChart = () => {
         const watchLaterCount = await totalWatchLatter();
         setFav(favCount ?? 0);
         setWatchLater(watchLaterCount ?? 0);
+
+        console.log("from the barchart", favCount, watchLaterCount);
       } catch (error) {
         console.log(error);
       }

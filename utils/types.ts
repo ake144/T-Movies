@@ -1,3 +1,4 @@
+
 import { number, object, string } from "zod"
 
 import { z } from 'zod';
@@ -64,4 +65,10 @@ export interface MovieSchema {
   categoryId: number;
   videoUrl: string;
   imageUrl: string | null;
+}
+
+export interface WatchLaterSchema { 
+  id: number,
+  movieId: number,
+  userEmail: string
 }

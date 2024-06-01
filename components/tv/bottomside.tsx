@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Tabs, Tab, Box, Typography } from '@mui/material';
 import LiveTvIcon from '@mui/icons-material/LiveTv';
 import MovieIcon from '@mui/icons-material/Movie';
@@ -6,6 +6,7 @@ import TvIcon from '@mui/icons-material/Tv';
 import SportsIcon from '@mui/icons-material/Sports';
 import { useSearchParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
+import { channels, programs } from '@/utils/actions/count';
 
 const TabPanel = (props: { [x: string]: any; children: any; value: any; index: any; }) => {
   const { children, value, index, ...other } = props;
@@ -33,9 +34,17 @@ const MediaTabs = () => {
   const selectedChannel = Number(searchParams.get('channelId'));
   const typeId = searchParams.get('typeId') || '';
   const categoryId = Number(searchParams.get('categoryId'))
+  const [channelCount,setChannelCount] = useState(0)
+  const [movieCount,setMovieCount] = useState(0)
+  const [tvShowCount,setTvShowCount] = useState(0)
+  const [sportCount,setSportCount] = useState(0)
+
+  
   const handleChange = (event: any, newValue: React.SetStateAction<number>) => {
     setValue(newValue);
   };
+
+
 
   const tabStyle = {
     border: '2px solid #2f2f5d',
@@ -58,6 +67,21 @@ const MediaTabs = () => {
     fontSize: '14px',
   };
 
+  useEffect(() => {
+    const fetchData = async () => {
+      const [movieCount, channelCount] = await Promise.all([
+        programs(),
+        channels()
+      ]);
+      setChannelCount(channelCount ?? 0);
+      setMovieCount(movieCount ?? 0);
+    };
+
+    fetchData();
+  }, []);
+  
+
+
   const constructUrl = (path: string, typeId: string) => {
     let url = `${path}?categoryId=${categoryId}`;
     if (selectedChannel) url += `&channelId=${selectedChannel}`;
@@ -77,7 +101,7 @@ const MediaTabs = () => {
         TabIndicatorProps={{ style: { display: 'none' } }}
         sx={{ display: 'flex', justifyContent: 'center' }}
       >
-        <Link href={constructUrl('/tv/live', '1')}>
+        <Link href={constructUrl('/tv/livetv', '1')}>
           <Box sx={tabStyle}>
             <LiveTvIcon fontSize="large" />
             <Typography sx={tabLabelStyle}>Live TV's</Typography>
@@ -88,17 +112,17 @@ const MediaTabs = () => {
           <Box sx={tabStyle}>
             <MovieIcon fontSize="large" />
             <Typography sx={tabLabelStyle}>Movies</Typography>
-            <Typography variant="body2">+500 Movies</Typography>
+            <Typography variant="body2">+{movieCount} Movies</Typography>
           </Box>
         </Link>
-        <Link href={constructUrl('/tv/tvshows', '3')}>
+        <Link href={constructUrl('/tv/tvshow', '3')}>
           <Box sx={tabStyle}>
             <TvIcon fontSize="large" />
             <Typography sx={tabLabelStyle}>TV Shows</Typography>
-            <Typography variant="body2">+900 Series</Typography>
+            <Typography variant="body2">+{tvShowCount} Series</Typography>
           </Box>
         </Link>
-        <Link href={constructUrl('/tv/sports', '4')}>
+        <Link href={constructUrl('/tv/sport', '4')}>
           <Box sx={tabStyle}>
             <SportsIcon fontSize="large" />
             <Typography sx={tabLabelStyle}>Sports</Typography>
