@@ -1,6 +1,7 @@
 'use server'
 
 import prisma from "@/lib/db";
+import { MovieSchema } from "../types";
 
 
 export async function searchMovies(searchTerm: string): Promise<MovieSchema[]> {
