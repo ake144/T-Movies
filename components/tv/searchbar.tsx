@@ -47,7 +47,7 @@ export default function SearchPage() {
     };
 
     search();
-  }, [searchTerm]);
+  }, [debouncedSearchTerm]);
 
   return (
     <Container>

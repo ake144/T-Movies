@@ -1,5 +1,3 @@
-
-
 import React from 'react';
 import { Card, CardMedia, CardContent, Typography, Box, IconButton } from '@mui/material';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
@@ -11,12 +9,26 @@ import { addMovieToFavorites } from '@/utils/actions/addFav';
 import { useSession } from 'next-auth/react';
 import { addMovieToWatchLater } from '@/utils/actions/addWatch';
 
-const HungerGameCard = ({ movie}: { movie: MovieSchema }) => {
-  const session = useSession()
-  const data = session.data
-  const user = data?.user
+const HungerGameCard = ({ movie }: { movie: MovieSchema }) => {
+  const { data: session } = useSession();
+  const user = session?.user;
 
-  console.log(user?.email)
+  const handleAddToWatchLater = async () => {
+    try {
+      await addMovieToWatchLater(movie.id, user?.email ?? '');
+    } catch (error) {
+      console.error('Error adding movie to Watch Later', error);
+    }
+  };
+
+  const handleAddToFavorites = async () => {
+    try {
+      await addMovieToFavorites(movie.id, user?.email ?? '');
+    } catch (error) {
+      console.error('Error adding movie to Favorites', error);
+    }
+  };
+
   return (
     <Card sx={{
       width: 250,
@@ -29,7 +41,7 @@ const HungerGameCard = ({ movie}: { movie: MovieSchema }) => {
       <CardMedia
         component="img"
         height="350"
-        image={movie.imageUrl || '/default-image.jpg'} 
+        image={movie.imageUrl || '/default-image.jpg'}
         alt={movie.title}
       />
       <CardContent sx={{
@@ -53,16 +65,14 @@ const HungerGameCard = ({ movie}: { movie: MovieSchema }) => {
         <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
           <IconButton sx={{ color: 'white' }}>
             <Link href={movie.videoUrl}>
-                <PlayArrowIcon />
+              <PlayArrowIcon />
             </Link>
           </IconButton>
-          <IconButton onClick={async()=>await addMovieToWatchLater(movie.id, user?.email ?? '')} 
-              sx={{ color: 'white' }}>
-                <AccessTimeIcon />
+          <IconButton onClick={handleAddToWatchLater} sx={{ color: 'white' }}>
+            <AccessTimeIcon />
           </IconButton>
-          <IconButton onClick={async()=> await addMovieToFavorites(movie.id,user?.email ?? '')}
-                sx={{ color: 'white' }}>
-                  <FavoriteBorderIcon />
+          <IconButton onClick={handleAddToFavorites} sx={{ color: 'white' }}>
+            <FavoriteBorderIcon />
           </IconButton>
         </Box>
       </CardContent>

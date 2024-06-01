@@ -1,3 +1,5 @@
+'use server'
+
 import prisma from '@/lib/db';
 
 interface MovieSchema {
@@ -27,10 +29,13 @@ export async function addMovieToWatchLater(movieId: number, userEmail: string) {
 }
 
 
-export async function totalWatchLatter() {
+export async function totalWatchLatter(userEmail?: string) {
   try {
-    const favoriteCount = await prisma.watchLater.findMany();
-    return favoriteCount.length;
+    const whereClause = userEmail ? { userEmail } : {};
+    const favoriteCount = await prisma.watchLater.count({
+      where: whereClause,
+    });
+    return favoriteCount;
   } catch (error) {
     console.error('Error counting favorites', error);
     throw new Error("Error counting favorites");

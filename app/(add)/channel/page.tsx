@@ -9,9 +9,6 @@ import { createChannel } from '@/utils/actions/createChannel';
 import { useRouter,redirect } from 'next/navigation';
 
 import { useSession } from 'next-auth/react'
-
-
-// Define the Zod schema for channel validation
 const ChannelSchema = z.object({
   channelName: z.string().min(1, 'Channel name is required').max(100, 'Channel name must be less than 100 characters'),
 });

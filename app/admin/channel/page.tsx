@@ -21,17 +21,36 @@ import {
   DialogContentText, 
   DialogTitle 
 } from '@mui/material';
-import { Edit, Delete, Visibility, Add } from '@mui/icons-material';
+import { Edit, Delete, Visibility, Add, FileDownload, FilterList } from '@mui/icons-material';
 import Link from 'next/link';
+import { useDebounce } from '@uidotdev/usehooks';
 import { fetchChannels, deleteChannel, updateChannel } from '@/utils/actions/createChannel'; // Adjust the import path as needed
-import { set } from 'zod';
-
+import { useSession } from 'next-auth/react';
+import { redirect } from 'next/navigation';
 
 const ChannelList = () => {
   const [channels, setChannels] = useState<{ id: number; name: string; isActive:boolean }[]>([]);
   const [selectedChannel, setSelectedChannel] = useState<{ id: number; name: string; isActive: boolean } | null>(null);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState(false);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [searchResults, setSearchResults] = useState<{ id: number; name: string; isActive:boolean }[]>([]);
+  const debouncedSearchTerm = useDebounce(searchTerm, 300);
+  
+  const { data: session } = useSession({
+    required: true,
+    onUnauthenticated() {
+        redirect('/api/auth/signin?callbackUrl=/admin/channel')
+    }
+  })
+
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchTerm(event.target.value);
+  };
+
+  const handleForm = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+  };
 
   useEffect(() => {
     const loadChannels = async () => {
@@ -44,6 +63,24 @@ const ChannelList = () => {
     };
     loadChannels();
   }, []);
+
+  useEffect(() => {
+    const search = () => {
+      try {
+        if (debouncedSearchTerm) {
+          const results = channels.filter(channel => 
+            channel.name.toLowerCase().includes(debouncedSearchTerm.toLowerCase())
+          );
+          setSearchResults(results);
+        } else {
+          setSearchResults(channels);
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    search();
+  }, [debouncedSearchTerm, channels]);
 
   const handleDelete = async (id: number) => {
     try {
@@ -67,10 +104,29 @@ const ChannelList = () => {
   return (
     <Container>
       <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
-        <TextField label="Search" variant="outlined" size="small" />
-        <Link href='/channel'>
-          <Button variant="contained" startIcon={<Add />} color="primary">Add Channel</Button>
-        </Link>
+        <form onSubmit={handleForm}>
+          <TextField 
+            label="Search" 
+            value={searchTerm}
+            name='search'
+            onChange={handleChange}
+            variant="outlined" 
+            size="small" 
+          />
+        </form>
+        <Box>
+          <Button variant="outlined" startIcon={<FileDownload />} color="primary" sx={{ mr: 1 }}>
+            Export
+          </Button>
+          <Button variant="outlined" startIcon={<FilterList />} color="primary" sx={{ mr: 1 }}>
+            Add Filter
+          </Button>
+          <Link href='/channel'>
+            <Button variant="contained" startIcon={<Add />} color="primary">
+              Add Program
+            </Button>
+          </Link>
+        </Box>
       </Box>
       <TableContainer component={Paper}>
         <Table>
@@ -82,11 +138,11 @@ const ChannelList = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {channels.map((channel) => (
+            {(debouncedSearchTerm ? searchResults : channels).map((channel) => (
               <TableRow key={channel.id}>
                 <TableCell>{channel.name}</TableCell>
                 <TableCell>
-                  <Switch checked={!channel.isActive}  color="success" />
+                  <Switch checked={!channel.isActive} color="success" />
                 </TableCell>
                 <TableCell>
                   <IconButton color="primary">

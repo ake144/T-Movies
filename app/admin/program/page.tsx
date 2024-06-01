@@ -20,26 +20,38 @@ import {
   DialogActions
 } from '@mui/material';
 import { Edit, Delete, Visibility, Add, FilterList, FileDownload } from '@mui/icons-material';
-import { updatePrograms,deletePrograms,fetchPrograms, } from '@/utils/actions/createProgram';
+import { updatePrograms, deletePrograms, fetchPrograms } from '@/utils/actions/createProgram';
 import Link from 'next/link';
-import { set } from 'zod';
+import { useDebounce } from '@uidotdev/usehooks';
+import { redirect } from 'next/navigation';
+import { useSession } from 'next-auth/react';
 
 interface ProgramSchema {
-    id: number;
-    title:string;
-    duration:number;
-    description:string;
-    videoUrl: string;
-    channelId:number;
-    typeId:number;
-    categoryId:number;
+  id: number;
+  title: string;
+  duration: number;
+  description: string;
+  videoUrl: string;
+  channelId: number;
+  typeId: number;
+  categoryId: number;
 }
 
 const Program = () => {
   const [programs, setPrograms] = useState<ProgramSchema[]>([]);
-  const [selectedprogram, setSelectedprogram] = useState<ProgramSchema | null>(null);
+  const [selectedProgram, setSelectedProgram] = useState<ProgramSchema | null>(null);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState(false);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [searchResults, setSearchResults] = useState<ProgramSchema[]>([]);
+  const debouncedSearchTerm = useDebounce(searchTerm, 300);
+
+  const { data: session } = useSession({
+    required: true,
+    onUnauthenticated() {
+        redirect('/api/auth/signin?callbackUrl=/admin/channel')
+    }
+  })
 
   useEffect(() => {
     const loadPrograms = async () => {
@@ -50,9 +62,34 @@ const Program = () => {
         console.error('Error fetching programs:', error);
       }
     };
-
     loadPrograms();
   }, []);
+
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchTerm(event.target.value);
+  }
+
+  const handleForm = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+  }
+
+  useEffect(() => {
+    const search = () => {
+      try {
+        if (debouncedSearchTerm) {
+          const results = programs.filter(program => 
+            program.title.toLowerCase().includes(debouncedSearchTerm.toLowerCase())
+          );
+          setSearchResults(results);
+        } else {
+          setSearchResults(programs);
+        }
+      } catch (error) {
+        console.error('Error searching programs:', error);
+      }
+    };
+    search();
+  }, [debouncedSearchTerm, programs]);
 
   const handleDelete = async (id: number) => {
     try {
@@ -62,12 +99,13 @@ const Program = () => {
       console.error('Error deleting program:', error);
     }
   }
- const handleEdit = (program: any) => {
-       setSelectedprogram(program);
-       setIsEditModalOpen(true);
-       
- }
-const handleUpdate = async (data: ProgramSchema) => {
+
+  const handleEdit = (program: ProgramSchema) => {
+    setSelectedProgram(program);
+    setIsEditModalOpen(true);
+  }
+
+  const handleUpdate = async (data: ProgramSchema) => {
     try {
       await updatePrograms(data.id, data);
       setPrograms(programs.map(program => (program.id === data.id ? data : program)));
@@ -77,17 +115,24 @@ const handleUpdate = async (data: ProgramSchema) => {
     }
   }
 
-  const handleDeleteConfirm = (program: any) => {
-        setSelectedprogram(program);
-        setIsDeleteConfirmOpen(true);
+  const handleDeleteConfirm = (program: ProgramSchema) => {
+    setSelectedProgram(program);
+    setIsDeleteConfirmOpen(true);
   }
-  
-
 
   return (
     <Box sx={{ p: 3 }}>
       <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
-        <TextField label="Search" variant="outlined" size="small" />
+        <form onSubmit={handleForm}>
+          <TextField 
+            label="Search" 
+            name='search'
+            value={searchTerm}
+            variant="outlined" 
+            onChange={handleChange}
+            size="small" 
+          />
+        </form>
         <Box>
           <Button variant="outlined" startIcon={<FileDownload />} color="primary" sx={{ mr: 1 }}>
             Export
@@ -115,20 +160,20 @@ const handleUpdate = async (data: ProgramSchema) => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {programs.map((program) => (
+            {(debouncedSearchTerm ? searchResults : programs).map((program) => (
               <TableRow key={program.id}>
                 <TableCell>{program.id}</TableCell>
                 <TableCell>{program.title}</TableCell>
                 <TableCell>{program.duration}</TableCell>
                 <TableCell>{program.description}</TableCell>
                 <TableCell>
-                  <Switch checked={true}   color="success" />
+                  <Switch checked={true} color="success" />
                 </TableCell>
                 <TableCell>
                   <Link href={program.videoUrl}>
-                        <IconButton >
-                          <Visibility />
-                        </IconButton>
+                    <IconButton>
+                      <Visibility />
+                    </IconButton>
                   </Link>
                   <IconButton color="primary" onClick={() => handleEdit(program)}>
                     <Edit />
@@ -142,7 +187,7 @@ const handleUpdate = async (data: ProgramSchema) => {
           </TableBody>
         </Table>
       </TableContainer>
-  <Dialog open={isEditModalOpen} onClose={() => setIsEditModalOpen(false)}>
+      <Dialog open={isEditModalOpen} onClose={() => setIsEditModalOpen(false)}>
         <DialogTitle>Edit Program</DialogTitle>
         <DialogContent>
           <TextField
@@ -152,17 +197,17 @@ const handleUpdate = async (data: ProgramSchema) => {
             label="Title"
             type="text"
             fullWidth
-            value={selectedprogram?.title || ''}
-            onChange={(e) => setSelectedprogram(prev => prev ? { ...prev, title: e.target.value } : null)}
+            value={selectedProgram?.title || ''}
+            onChange={(e) => setSelectedProgram(prev => prev ? { ...prev, title: e.target.value } : null)}
           />
           <TextField
             margin="dense"
             id="duration"
-            label="Duration im ms"
+            label="Duration in ms"
             type="number"
             fullWidth
-            value={selectedprogram?.duration || 0}
-            onChange={(e) => setSelectedprogram({...selectedprogram!,duration: Number(e.target.value)})}
+            value={selectedProgram?.duration || 0}
+            onChange={(e) => setSelectedProgram(prev => prev ? { ...prev, duration: Number(e.target.value) } : null)}
           />
           <TextField
             margin="dense"
@@ -170,8 +215,8 @@ const handleUpdate = async (data: ProgramSchema) => {
             label="Description"
             type="text"
             fullWidth
-            value={selectedprogram?.description || ''}
-            onChange={(e) => setSelectedprogram(prev => prev ? { ...prev, description: e.target.value } : null)} 
+            value={selectedProgram?.description || ''}
+            onChange={(e) => setSelectedProgram(prev => prev ? { ...prev, description: e.target.value } : null)} 
           />
           <TextField
             margin="dense"
@@ -179,16 +224,15 @@ const handleUpdate = async (data: ProgramSchema) => {
             label="Video URL"
             type="text"
             fullWidth
-            value={selectedprogram?.videoUrl || ''}
-            onChange={(e) => setSelectedprogram(prev => prev ? { ...prev, videoUrl: e.target.value } : null)}
+            value={selectedProgram?.videoUrl || ''}
+            onChange={(e) => setSelectedProgram(prev => prev ? { ...prev, videoUrl: e.target.value } : null)}
           />
-          </DialogContent>
-           <DialogActions>
-              <Button onClick={() => setIsEditModalOpen(false)}>Cancel</Button>
-              <Button onClick={() => selectedprogram && handleUpdate(selectedprogram)}>Update</Button>
-            </DialogActions>
-
-     </Dialog>   
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setIsEditModalOpen(false)}>Cancel</Button>
+          <Button onClick={() => selectedProgram && handleUpdate(selectedProgram)}>Update</Button>
+        </DialogActions>
+      </Dialog>   
       <Dialog open={isDeleteConfirmOpen} onClose={() => setIsDeleteConfirmOpen(false)}>
         <DialogTitle>Delete Program</DialogTitle>
         <DialogContent>
@@ -196,10 +240,9 @@ const handleUpdate = async (data: ProgramSchema) => {
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setIsDeleteConfirmOpen(false)}>Cancel</Button>
-          <Button onClick={() =>  selectedprogram && handleDelete(selectedprogram.id)}>Delete</Button>
+          <Button onClick={() => selectedProgram && handleDelete(selectedProgram.id)}>Delete</Button>
         </DialogActions>
       </Dialog>
-    
     </Box>
   );
 };

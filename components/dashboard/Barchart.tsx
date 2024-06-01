@@ -24,7 +24,6 @@ const CustomPieChart = () => {
 
     fetchCategoryCounts();
   }, []);
-
   const data = [
     { name: 'Recommended', value: 400, color: '#8884d8' },
     { name: 'Featured', value: 300, color: '#82ca9d' },

@@ -67,3 +67,21 @@ export async function updateChannel(id:number, name:string){
     }
 
 }
+
+export async function searchChannel(name:string){
+    try{
+        const channel = await prisma.channel.findMany({
+            where:{
+                name:{
+                    contains: name.toLowerCase()
+                }
+            }
+        })
+        console.log("channel searched", channel)
+    }
+    catch(error){
+        console.log("Error searching channel", error)
+        throw new Error("error searching channel")
+    }
+
+}

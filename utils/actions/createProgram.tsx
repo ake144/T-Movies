@@ -91,3 +91,21 @@ export async function updatePrograms(id:number, data:ProgramSchema) {
   
 }
 
+
+
+export async function searchProgram(searchTerm: string) {
+    try {
+        const programs = await prisma.movie.findMany({
+            where: {
+                title: {
+                    contains: searchTerm.toLowerCase(),
+                },
+                }
+            })
+        console.log("programs fetched", programs);
+        }
+    catch (error) {
+        console.error("Error fetching programs", error);
+        throw new Error("Error fetching programs");
+    }
+}

@@ -36,11 +36,11 @@ model WatchLater {
 
 
 model Favorites {
-  id      Int      @id @default(autoincrement())
-  userEmail  String
-  movieId Int
-  user    User     @relation(fields: [userEmail], references: [email])
-  movie   Movie    @relation(fields: [movieId], references: [id])
+  id        Int      @id @default(autoincrement())
+  userEmail String   @unique
+  movieId   Int
+  user      User     @relation(fields: [userEmail], references: [email])
+  movie     Movie    @relation(fields: [movieId], references: [id])
 }
 
 model Channel {

@@ -17,7 +17,8 @@ import { useForm, Controller, SubmitHandler } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { createProgram } from '@/utils/actions/createProgram'; // Import the server action
-import { useRouter } from 'next/navigation';
+import { redirect, useRouter } from 'next/navigation';
+import { useSession } from 'next-auth/react';
 
 // Zod schema for form validation
 const ProgramSchema = z.object({
@@ -34,6 +35,15 @@ const ProgramSchema = z.object({
 type ProgramSchemaType = z.infer<typeof ProgramSchema>;
 
 const AddProgram = () => {
+
+
+  const { data: session } = useSession({
+    required: true,
+    onUnauthenticated() {
+        redirect('/api/auth/signin?callbackUrl=/program')
+    }
+  })
+
   const router = useRouter();
   const { control, handleSubmit, formState: { errors },reset } = useForm<ProgramSchemaType>({
     resolver: zodResolver(ProgramSchema)
