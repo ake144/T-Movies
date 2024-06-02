@@ -6,9 +6,24 @@ import { Box, Typography, List, ListItem, ListItemText, ListItemIcon } from '@mu
 import { channels, programs } from '@/utils/actions/count';
 
 const CustomLineChart = () => {
-  
+  const [channelCount, setChannelCount] = useState(0);
+  const [movieCount, setMovieCount] = useState(0);
+  const [tvShowCount, setTvShowCount] = useState(0);
+  const [sportCount, setSportCount] = useState(0);
 
+  useEffect(() => {
+    const fetchData = async () => {
+      const counts = await programs();
+      const channelCount = await channels();
 
+      setChannelCount(channelCount ?? 0);
+      setMovieCount(counts.Movies ?? 0);
+      setTvShowCount(counts['TV Shows'] ?? 0);
+      setSportCount(counts.Sports ?? 0);
+    };
+
+    fetchData();
+  }, []);
 
   const data = [
     { day: 'MON', A: 30, B: 20, C: 27, D: 18, E: 23 },
@@ -19,15 +34,13 @@ const CustomLineChart = () => {
     { day: 'SAT', A: 40, B: 33, C: 35, D: 22, E: 29 },
     { day: 'SUN', A: 50, B: 40, C: 40, D: 25, E: 32 },
   ];
-  
+
   const legendData = [
-    { name: 'Live TV', color: '#8884d8', value: 50 },
-    { name: 'Movies', color: '#82ca9d', value: 40 },
-    { name: 'TV Shows', color: '#ffc658', value: 40 },
-    { name: 'Sports', color: '#d0ed57', value: 25 },
-    { name: 'Popular', color: '#4daf4a', value: 32 },
+    { name: 'Live TV', color: '#8884d8', value: channelCount },
+    { name: 'Movies', color: '#82ca9d', value: movieCount },
+    { name: 'TV Shows', color: '#ffc658', value: tvShowCount },
+    { name: 'Sports', color: '#d0ed57', value: sportCount },
   ];
-  
 
   return (
     <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
@@ -46,22 +59,21 @@ const CustomLineChart = () => {
       </ResponsiveContainer>
       <Box sx={{ ml: 1 }}>
         <Typography variant="h6" align="center" sx={{ mb: 1, backgroundColor: 'black', color: 'white', padding: '5px' }}>
-          201<br />over all program
+          201<br />overall program
         </Typography>
         <List>
-          {legendData.map((entry, index) => (
-            <ListItem key={`item-${index}`} sx={{ display: 'flex', alignItems: 'center' }}>
+          {legendData.map((item) => (
+            <ListItem key={item.name}>
               <ListItemIcon>
-                  <Box sx={{ width: 20, height: 20, backgroundColor: entry.color, borderRadius:'100%' }} />
-                </ListItemIcon>
-                <ListItemText primary={entry.name}  sx={{marginRight:3}}/>
-                <ListItemText primary={entry.value} />            
+                <Box sx={{ width: 24, height: 24, backgroundColor: item.color }} />
+              </ListItemIcon>
+              <ListItemText primary={`${item.name}: ${item.value}`} />
             </ListItem>
           ))}
         </List>
       </Box>
     </Box>
   );
-}
+};
 
 export default CustomLineChart;

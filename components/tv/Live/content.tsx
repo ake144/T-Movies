@@ -14,6 +14,7 @@ const [LiveTv,setLiveTv] = useState<MovieSchema[]>([])
 const searchParams = useSearchParams()
 const channelId = Number(searchParams.get('channelId'))
 const typeId = Number(searchParams.get('typeId'))
+const [loading, setLoading] = useState(true)
 
 
 useEffect(()=>{
@@ -21,9 +22,11 @@ useEffect(()=>{
  try{
   const live =  await getLiveTv(channelId,typeId)
    setLiveTv(live)
+    setLoading(false)
 }
 catch(error){
   console.log(error)
+  setLoading(false)
 }
   }
   fetchMovies()
@@ -39,11 +42,17 @@ catch(error){
     <Grid sx={{ flexGrow: 1, paddingBottom:'30px' }} container spacing={2}>
         <Grid item xs={12}>
             <Grid container justifyContent="center" spacing={2}>
-                {LiveTv.map((movie) => (
+                {loading ? (
+                    <p>Loading...</p>
+                ) : LiveTv.length === 0 ? (
+                    <p>No movies found</p>
+                ) : (
+                    LiveTv.map((movie) => (
                     <Grid key={movie.id} item>        
                          <LiveTvCard movie={movie}/> 
                      </Grid>
-                ))}
+                ))
+                )}  
             </Grid>
         </Grid>
      </Grid>

@@ -6,12 +6,12 @@ import authOptions from '@/lib/auth'
 import LiveTv from '@/components/tv/Live/content'
 
 
-async function MoviePage() {
+async function Live() {
 
   const session = await getServerSession(authOptions);
 
   if (!session) {
-    redirect('/api/auth/signin?callbackUrl=/tv/LiveTv');
+    redirect('/api/auth/signin?callbackUrl=/tv/live');
   }
   return (
       <>
@@ -20,4 +20,4 @@ async function MoviePage() {
   )
 }
 
-export default MoviePage
+export default Live

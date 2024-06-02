@@ -1,48 +1,62 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { 
-  Container, 
-  Table, 
-  TableBody, 
-  TableCell, 
-  TableContainer, 
-  TableHead, 
-  TableRow, 
-  Paper, 
-  IconButton, 
-  Switch, 
-  TextField, 
-  Button, 
-  Box, 
-  Dialog, 
-  DialogActions, 
-  DialogContent, 
-  DialogContentText, 
-  DialogTitle 
+import {
+  Container,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+  IconButton,
+  Switch,
+  TextField,
+  Button,
+  Box,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  TableSortLabel
 } from '@mui/material';
 import { Edit, Delete, Visibility, Add, FileDownload, FilterList } from '@mui/icons-material';
 import Link from 'next/link';
 import { useDebounce } from '@uidotdev/usehooks';
-import { fetchChannels, deleteChannel, updateChannel } from '@/utils/actions/createChannel'; // Adjust the import path as needed
+import { fetchChannels, deleteChannel, updateChannel } from '@/utils/actions/createChannel';
 import { useSession } from 'next-auth/react';
 import { redirect } from 'next/navigation';
+import TablePagination from '@/components/pagination'; // Adjust the import path as needed
 
-const ChannelList = () => {
-  const [channels, setChannels] = useState<{ id: number; name: string; isActive:boolean }[]>([]);
-  const [selectedChannel, setSelectedChannel] = useState<{ id: number; name: string; isActive: boolean } | null>(null);
+interface Channel {
+  id: number;
+  name: string;
+  isActive: boolean;
+}
+
+const ChannelList: React.FC = () => {
+  const [channels, setChannels] = useState<Channel[]>([]);
+  const [searchResults, setSearchResults] = useState<Channel[]>([]);
+  const [selectedChannel, setSelectedChannel] = useState<Channel | null>(null);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
-  const [searchResults, setSearchResults] = useState<{ id: number; name: string; isActive:boolean }[]>([]);
+  const [totalChannels, setTotalChannels] = useState(0);
   const debouncedSearchTerm = useDebounce(searchTerm, 300);
-  
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [sortField, setSortField] = useState('name');
+  const [sortOrder, setSortOrder] = useState<'asc' | 'desc' | undefined>('asc');
+
   const { data: session } = useSession({
     required: true,
     onUnauthenticated() {
-        redirect('/api/auth/signin?callbackUrl=/admin/channel')
+      redirect('/api/auth/signin?callbackUrl=/admin/channel');
     }
-  })
+  });
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(event.target.value);
@@ -55,31 +69,30 @@ const ChannelList = () => {
   useEffect(() => {
     const loadChannels = async () => {
       try {
-        const data = await fetchChannels();
-        setChannels(data);
+        const { channels, totalChannels } = await fetchChannels({
+          page: currentPage,
+          limit: rowsPerPage,
+          sortField,
+          sortOrder,
+        });
+        setChannels(channels);
+        setTotalChannels(totalChannels);
       } catch (error) {
         console.error('Error fetching channels:', error);
       }
     };
     loadChannels();
-  }, []);
+  }, [ currentPage, rowsPerPage, sortField, sortOrder]);
 
   useEffect(() => {
-    const search = () => {
-      try {
-        if (debouncedSearchTerm) {
-          const results = channels.filter(channel => 
-            channel.name.toLowerCase().includes(debouncedSearchTerm.toLowerCase())
-          );
-          setSearchResults(results);
-        } else {
-          setSearchResults(channels);
-        }
-      } catch (error) {
-        console.error(error);
-      }
-    };
-    search();
+    if (debouncedSearchTerm) {
+      const results = channels.filter(channel =>
+        channel.name.toLowerCase().includes(debouncedSearchTerm.toLowerCase())
+      );
+      setSearchResults(results);
+    } else {
+      setSearchResults(channels);
+    }
   }, [debouncedSearchTerm, channels]);
 
   const handleDelete = async (id: number) => {
@@ -91,27 +104,43 @@ const ChannelList = () => {
     }
   };
 
-  const handleEdit = (channel: any) => {
+  const handleEdit = (channel: Channel) => {
     setSelectedChannel(channel);
     setIsEditModalOpen(true);
   };
 
-  const handleDeleteConfirm = (channel: any) => {
+  const handleDeleteConfirm = (channel: Channel) => {
     setSelectedChannel(channel);
     setIsDeleteConfirmOpen(true);
   };
+
+  const handlePageChange = (event: unknown, newPage: number) => {
+    setCurrentPage(newPage + 1);
+  };
+
+  const handleRowsPerPageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setCurrentPage(1);
+  };
+
+  const handleSortRequest = (field: string) => {
+    const isAsc = sortField === field && sortOrder === 'asc';
+    setSortOrder(isAsc ? 'desc' : 'asc');
+    setSortField(field);
+  };
+
 
   return (
     <Container>
       <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
         <form onSubmit={handleForm}>
-          <TextField 
-            label="Search" 
+          <TextField
+            label="Search"
             value={searchTerm}
             name='search'
             onChange={handleChange}
-            variant="outlined" 
-            size="small" 
+            variant="outlined"
+            size="small"
           />
         </form>
         <Box>
@@ -123,7 +152,7 @@ const ChannelList = () => {
           </Button>
           <Link href='/channel'>
             <Button variant="contained" startIcon={<Add />} color="primary">
-              Add Program
+              Add Channel
             </Button>
           </Link>
         </Box>
@@ -132,7 +161,15 @@ const ChannelList = () => {
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell>Name</TableCell>
+              <TableCell>
+                <TableSortLabel
+                  active={sortField === 'name'}
+                  direction={sortField === 'name' ? sortOrder : 'asc'}
+                  onClick={() => handleSortRequest('name')}
+                >
+                  Name
+                </TableSortLabel>
+              </TableCell>
               <TableCell>Status</TableCell>
               <TableCell>Action</TableCell>
             </TableRow>
@@ -142,7 +179,11 @@ const ChannelList = () => {
               <TableRow key={channel.id}>
                 <TableCell>{channel.name}</TableCell>
                 <TableCell>
-                  <Switch checked={!channel.isActive} color="success" />
+                  <Switch
+                    checked={channel.isActive}
+                    color="success"
+                    // onChange={() => handleToggleActive(channel)}
+                  />
                 </TableCell>
                 <TableCell>
                   <IconButton color="primary">
@@ -160,7 +201,13 @@ const ChannelList = () => {
           </TableBody>
         </Table>
       </TableContainer>
-
+      <TablePagination
+        totalItems={totalChannels}
+        rowsPerPage={rowsPerPage}
+        currentPage={currentPage}
+        onPageChange={handlePageChange}
+        onRowsPerPageChange={handleRowsPerPageChange}
+      />
       {/* Edit Channel Dialog */}
       <Dialog open={isEditModalOpen} onClose={() => setIsEditModalOpen(false)}>
         <DialogTitle>Edit Channel</DialogTitle>
@@ -183,8 +230,8 @@ const ChannelList = () => {
               if (selectedChannel) {
                 await updateChannel(selectedChannel.id, selectedChannel.name);
                 setIsEditModalOpen(false);
-                // Update the channels list to reflect changes
                 setChannels(channels.map(channel => channel.id === selectedChannel.id ? selectedChannel : channel));
+                setSearchResults(searchResults.map(channel => channel.id === selectedChannel.id ? selectedChannel : channel));
               }
             } catch (error) {
               console.error('Error updating channel:', error);
@@ -192,7 +239,6 @@ const ChannelList = () => {
           }}>Save</Button>
         </DialogActions>
       </Dialog>
-
       {/* Delete Confirmation Dialog */}
       <Dialog
         open={isDeleteConfirmOpen}

@@ -31,7 +31,7 @@ const CustomPieChart = () => {
     { name: 'Featured', value: 300, color: '#82ca9d' },
     { name: 'Favorites', value: fav, color: '#ffc658' },
     { name: 'Watch Later', value: watchLater, color: '#d0ed57' },
-    { name: 'Popular', value: 100, color: '#4daf4a' },
+
   ];
 
   return (

@@ -14,6 +14,7 @@ const [tvShow,setTvShow] = useState<MovieSchema[]>([])
 const searchParams = useSearchParams()
 const channelId = Number(searchParams.get('channelId'))
 const typeId = Number(searchParams.get('typeId'))
+const [Loading, setLoading] = useState(true)
 
 
 useEffect(()=>{
@@ -21,9 +22,11 @@ useEffect(()=>{
  try{
   const show =  await getTvShow(channelId,typeId)
    setTvShow(show)
+    setLoading(false)
 }
 catch(error){
   console.log(error)
+  setLoading(false)
 }
   }
   fetchMovies()
@@ -39,11 +42,18 @@ catch(error){
     <Grid sx={{ flexGrow: 1, paddingBottom:'30px' }} container spacing={2}>
       <Grid item xs={12}>
         <Grid container justifyContent="center" spacing={2}>
-          {tvShow.map((show) => (
-            <Grid key={show.id} item>        
-               <TvShowCard   movie={show}/>
-            </Grid>
-          ))}
+            {  Loading ? (
+                <p>Loading...</p>
+              ) : tvShow.length === 0 ? (
+                <p>No movies found</p>
+              ) : (
+                tvShow.map((movie) => (
+                  <Grid key={movie.id} item>        
+                    <TvShowCard movie={movie}/>
+                  </Grid>
+                ))
+              )}
+              
         </Grid>
       </Grid>
      </Grid>

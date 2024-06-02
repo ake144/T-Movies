@@ -33,18 +33,15 @@ const MediaTabs = () => {
   const searchParams = useSearchParams();
   const selectedChannel = Number(searchParams.get('channelId'));
   const typeId = searchParams.get('typeId') || '';
-  const categoryId = Number(searchParams.get('categoryId'))
-  const [channelCount,setChannelCount] = useState(0)
-  const [movieCount,setMovieCount] = useState(0)
-  const [tvShowCount,setTvShowCount] = useState(0)
-  const [sportCount,setSportCount] = useState(0)
+  const categoryId = Number(searchParams.get('categoryId'));
+  const [channelCount, setChannelCount] = useState(0);
+  const [movieCount, setMovieCount] = useState(0);
+  const [tvShowCount, setTvShowCount] = useState(0);
+  const [sportCount, setSportCount] = useState(0);
 
-  
   const handleChange = (event: any, newValue: React.SetStateAction<number>) => {
     setValue(newValue);
   };
-
-
 
   const tabStyle = {
     border: '2px solid #2f2f5d',
@@ -69,18 +66,17 @@ const MediaTabs = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const [movieCount, channelCount] = await Promise.all([
-        programs(),
-        channels()
-      ]);
+      const counts = await programs();
+      const channelCount = await channels();
+
       setChannelCount(channelCount ?? 0);
-      setMovieCount(movieCount ?? 0);
+      setMovieCount(counts.Movies ?? 0);
+      setTvShowCount(counts['TV Shows'] ?? 0);
+      setSportCount(counts.Sports ?? 0);
     };
 
     fetchData();
   }, []);
-  
-
 
   const constructUrl = (path: string, typeId: string) => {
     let url = `${path}?categoryId=${categoryId}`;
@@ -101,11 +97,11 @@ const MediaTabs = () => {
         TabIndicatorProps={{ style: { display: 'none' } }}
         sx={{ display: 'flex', justifyContent: 'center' }}
       >
-        <Link href={constructUrl('/tv/livetv', '1')}>
+        <Link href={constructUrl('/tv/live', '1')}>
           <Box sx={tabStyle}>
             <LiveTvIcon fontSize="large" />
             <Typography sx={tabLabelStyle}>Live TV's</Typography>
-            <Typography variant="body2">+5000 Channels</Typography>
+            <Typography variant="body2">+{channelCount} Channels</Typography>
           </Box>
         </Link>
         <Link href={constructUrl('/tv/movies', '2')}>
@@ -126,7 +122,7 @@ const MediaTabs = () => {
           <Box sx={tabStyle}>
             <SportsIcon fontSize="large" />
             <Typography sx={tabLabelStyle}>Sports</Typography>
-            <Typography variant="body2">+200 Channels</Typography>
+            <Typography variant="body2">+{sportCount} Channels</Typography>
           </Box>
         </Link>
       </Tabs>

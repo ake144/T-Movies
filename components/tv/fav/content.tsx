@@ -14,6 +14,7 @@ function FavMovies() {
   const session = useSession()
   const user = session.data?.user
   const userEmail = user?.email || '' 
+  const [Loading, setLoading] = useState(true)
 
   const [favMovie, setFavMovie] = useState<MovieSchema[]>([]);
 
@@ -23,8 +24,10 @@ function FavMovies() {
         const show = await getFavorites(userEmail);
         const movies = show.map((item) => item.movie); 
         setFavMovie(movies);
+        setLoading(false);
       } catch (error) {
         console.log(error);
+        setLoading(false);
       }
     };
     fetchMovies();
@@ -39,11 +42,17 @@ function FavMovies() {
     <Grid sx={{ flexGrow: 1, paddingBottom:'30px' }} container spacing={2}>
       <Grid item xs={12}>
         <Grid container justifyContent="center" spacing={2}>
-          {favMovie.map((show) => (
-            <Grid key={show.id} item>        
-               <TvShowCard   movie={show}/>
-            </Grid>
-          ))}
+            {  Loading ? (
+                <p>Loading...</p>
+              ) : favMovie.length === 0 ? (
+                <p>No movies found</p>
+              ) : (
+                favMovie.map((movie) => (
+                  <Grid key={movie.id} item>        
+                    <TvShowCard movie={movie}/>
+                  </Grid>
+                ))
+              )}
         </Grid>
       </Grid>
      </Grid>

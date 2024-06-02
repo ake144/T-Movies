@@ -17,7 +17,8 @@ import {
   Dialog,
   DialogContent,
   DialogTitle,
-  DialogActions
+  DialogActions,
+  TableSortLabel
 } from '@mui/material';
 import { Edit, Delete, Visibility, Add, FilterList, FileDownload } from '@mui/icons-material';
 import { updatePrograms, deletePrograms, fetchPrograms } from '@/utils/actions/createProgram';
@@ -25,6 +26,8 @@ import Link from 'next/link';
 import { useDebounce } from '@uidotdev/usehooks';
 import { redirect } from 'next/navigation';
 import { useSession } from 'next-auth/react';
+import TablePagination from '@/components/pagination';
+import { set } from 'zod';
 
 interface ProgramSchema {
   id: number;
@@ -40,12 +43,19 @@ interface ProgramSchema {
 const Program = () => {
   const [programs, setPrograms] = useState<ProgramSchema[]>([]);
   const [selectedProgram, setSelectedProgram] = useState<ProgramSchema | null>(null);
+  const [searchResults, setSearchResults] = useState<ProgramSchema[]>([]);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
-  const [searchResults, setSearchResults] = useState<ProgramSchema[]>([]);
   const debouncedSearchTerm = useDebounce(searchTerm, 300);
+  const [totalPrograms, setTotalPrograms] = useState(0);
 
+  const [currentPage, setCurrentPage] = useState(1);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [sortField, setSortField] = useState('title');
+  const [sortOrder, setSortOrder] = useState<'asc' | 'desc' | undefined>('asc');
+
+  
   const { data: session } = useSession({
     required: true,
     onUnauthenticated() {
@@ -56,14 +66,20 @@ const Program = () => {
   useEffect(() => {
     const loadPrograms = async () => {
       try {
-        const data = await fetchPrograms();
-        setPrograms(data);
+        const {programs, totalPrograms} = await fetchPrograms({
+          page: currentPage,
+          limit: rowsPerPage,
+          sortField,
+          sortOrder
+        });
+        setPrograms(programs);
+        setTotalPrograms(totalPrograms);
       } catch (error) {
         console.error('Error fetching programs:', error);
       }
     };
     loadPrograms();
-  }, []);
+  }, [currentPage, rowsPerPage, sortField, sortOrder]);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(event.target.value);
@@ -74,8 +90,6 @@ const Program = () => {
   }
 
   useEffect(() => {
-    const search = () => {
-      try {
         if (debouncedSearchTerm) {
           const results = programs.filter(program => 
             program.title.toLowerCase().includes(debouncedSearchTerm.toLowerCase())
@@ -84,11 +98,6 @@ const Program = () => {
         } else {
           setSearchResults(programs);
         }
-      } catch (error) {
-        console.error('Error searching programs:', error);
-      }
-    };
-    search();
   }, [debouncedSearchTerm, programs]);
 
   const handleDelete = async (id: number) => {
@@ -119,6 +128,22 @@ const Program = () => {
     setSelectedProgram(program);
     setIsDeleteConfirmOpen(true);
   }
+
+  const handlePageChange = (event: unknown, newPage: number) => {
+    setCurrentPage(newPage + 1);
+  };
+
+  const handleRowsPerPageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setCurrentPage(1);
+  };
+
+  const handleSortRequest = (field: string) => {
+    const isAsc = sortField === field && sortOrder === 'asc';
+    setSortOrder(isAsc ? 'desc' : 'asc');
+    setSortField(field);
+  };
+
 
   return (
     <Box sx={{ p: 3 }}>
@@ -151,10 +176,43 @@ const Program = () => {
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell>Id</TableCell>
-              <TableCell>Title</TableCell>
-              <TableCell>Duration</TableCell>
-              <TableCell>Description</TableCell>
+              <TableCell>
+              <TableSortLabel
+                  active={sortField === 'id'}
+                  direction={sortField === 'id' ? sortOrder : 'asc'}
+                  onClick={() => handleSortRequest('id')}
+                >
+                Id
+                </TableSortLabel>
+                </TableCell>
+              <TableCell>
+              <TableSortLabel
+                  active={sortField === 'title'}
+                  direction={sortField === 'title' ? sortOrder : 'asc'}
+                  onClick={() => handleSortRequest('title')}
+                >
+                  Title
+                </TableSortLabel>
+                </TableCell>
+              <TableCell>
+              <TableSortLabel
+                  active={sortField === 'duration'}
+                  direction={sortField === 'duration' ? sortOrder : 'asc'}
+                  onClick={() => handleSortRequest('duration')}
+                >
+                  Duration
+                </TableSortLabel>
+                
+                </TableCell>
+              <TableCell>
+                   <TableSortLabel
+                  active={sortField === 'description'}
+                  direction={sortField === 'description' ? sortOrder : 'asc'}
+                  onClick={() => handleSortRequest('description')}
+                  >
+                    Description
+                  </TableSortLabel>
+               </TableCell>
               <TableCell>Status</TableCell>
               <TableCell>Action</TableCell>
             </TableRow>
@@ -187,6 +245,14 @@ const Program = () => {
           </TableBody>
         </Table>
       </TableContainer>
+      <TablePagination
+        totalItems={totalPrograms}
+        rowsPerPage={rowsPerPage}
+        currentPage={currentPage}
+        onPageChange={handlePageChange}
+        onRowsPerPageChange={handleRowsPerPageChange}
+      />
+
       <Dialog open={isEditModalOpen} onClose={() => setIsEditModalOpen(false)}>
         <DialogTitle>Edit Program</DialogTitle>
         <DialogContent>

@@ -49,7 +49,7 @@ const Sidebar = () => {
   const selectedCategory = Number(searchParams.get('categoryId'))
 
   const handleChannelClick = (id: number) => {
-    router.push(`?categoryId=${selectedCategory}&channelId=${id}`);
+    router.push(`?categoryId=${selectedCategory}&channelId=${id}&channelName=${channels.find((channel) => channel.id === id)?.name}`);
   };
 
   return (

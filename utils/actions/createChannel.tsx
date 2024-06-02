@@ -21,16 +21,40 @@ export async function createChannel(name:string) {
     
 }
 
-export async function fetchChannels(){
-    try{
-        const channels = await prisma.channel.findMany();
-        console.log('channels fetched:', channels);
-        return channels.map(channel => ({ ...channel, isActive: true }));;
-    }
-    catch(e){
-        throw new Error('an Error fetching channels')
-    }
+export async function fetchChannels(query: { searchTerm?: string, page?: number, limit?: number, sortField?: string, sortOrder?: 'asc' | 'desc' }) {
+    const { searchTerm = '', page = 1, limit = 10, sortField = 'name', sortOrder = 'asc' } = query;
+    const offset = (page - 1) * limit;
 
+    try {
+        const where = searchTerm ? {
+            name: {
+                contains: searchTerm.toLowerCase()
+            }
+        } : {};
+
+        const channels = await prisma.channel.findMany({
+            where,
+            skip: offset,
+            take: limit,
+            orderBy: {
+                [sortField]: sortOrder,
+            },
+        });
+
+        const totalChannels = await prisma.channel.count({ where });
+
+
+        const channelsWithIsActive = channels.map(channel => ({ ...channel, isActive: true }));
+
+
+        return {
+            channels:channelsWithIsActive,
+            totalChannels
+        };
+    } catch (error) {
+        console.error('Error fetching channels:', error);
+        throw new Error('An error occurred while fetching channels');
+    }
 }
 
 export async function deleteChannel(id:number){

@@ -12,6 +12,7 @@ function WatchLater() {
   const session = useSession()
   const user = session.data?.user
   const userEmail = user?.email || '' 
+  const [Loading, setLoading] = useState(true)
 
   const [watchLater, setWatchLater] = useState<MovieSchema[]>([])
 
@@ -20,8 +21,10 @@ function WatchLater() {
       try {
         const results = await getWatchLaterMovies(userEmail)
         setWatchLater(results)
+        setLoading(false)
       } catch (error) {
         console.log(error)
+        setLoading(false)
       }
     }
     fetchMovies()
@@ -34,11 +37,17 @@ function WatchLater() {
           <Header />
         </Box>
         <Grid container spacing={2} justifyContent="center">
-          {watchLater.map((movie) => (
-            <Grid key={movie.id} item>
-              <TvShowCard movie={movie} />
-            </Grid>
-          ))}
+          {Loading ? (
+            <p>Loading...</p>
+          ) : watchLater.length === 0 ? (
+            <p>No movies found</p>
+          ) : (
+            watchLater.map((movie) => (
+              <Grid key={movie.id} item>
+                <TvShowCard movie={movie} />
+              </Grid>
+            ))
+          )}
         </Grid>
       </Box>
     </>

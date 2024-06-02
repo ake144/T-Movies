@@ -8,7 +8,7 @@ import { Group, LiveTv, Dvr, FileDownload, FilterList, Add } from '@mui/icons-ma
 import CustomPieChart from './Barchart'
 import CustomLineChart from './LinChart'
 import { PieChart, Pie,Legend, Tooltip, LineChart, Line, CartesianGrid, XAxis, YAxis } from 'recharts';
-import { channels, programs, users } from '@/utils/actions/count';
+import { channels, programsCount, users } from '@/utils/actions/count';
 import { set } from 'zod';
 import { ChannelSchema } from '@/utils/types';
 import Link from 'next/link';
@@ -24,28 +24,12 @@ const DashboardPage: FC = () => {
   const [programTypes, setProgramTypes] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
 
-  const filteredProgramCategories = [
-    { name: 'Comedy', count: 10 },
-    { name: 'Drama', count: 20 },
-    { name: 'Action', count: 30 },
-    { name: 'News', count: 40 },
-    { name: 'Sports', count: 50 },
-  ];
-
-  const filteredProgramTypes = [
-    { type: 'Series', count: 10 },
-    { type: 'Movie', count: 20 },
-    { type: 'Documentary', count: 30 },
-    { type: 'News', count: 40 },
-    { type: 'Sports', count: 50 },
-  ];
-
   useEffect(() => {
     const fetchCounts = async () => {
       try {
         const [userCount, movieCount, channelCount] = await Promise.all([
           users(),
-          programs(),
+          programsCount(),
           channels()
         ]);
         setUserCount(userCount ?? 0);
@@ -61,22 +45,13 @@ const DashboardPage: FC = () => {
     fetchCounts();
   }, []);
 
-
-//   const filteredProgramCategories = programCategories.filter(category =>
-//     category.name.toLowerCase().includes(searchQuery.toLowerCase())
-//   );
-
-//   const filteredProgramTypes = programTypes.filter(type =>
-//     type.name.toLowerCase().includes(searchQuery.toLowerCase())
-//   );
-
   return (
     <>
        <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
         <form >
           <TextField 
             label="Search" 
-            // value={searchTerm}
+            disabled={true}
             name='search'
             // onChange={handleChange}
             variant="outlined" 
@@ -90,11 +65,11 @@ const DashboardPage: FC = () => {
           <Button variant="outlined" startIcon={<FilterList />} color="primary" sx={{ mr: 1 }}>
             Add Filter
           </Button>
-          <Link href='/channel'>
+
             <Button variant="contained" startIcon={<Add />} color="primary">
-              Add Program
+              Add filter
             </Button>
-          </Link>
+
         </Box>
       </Box>
       <Box

@@ -3,6 +3,7 @@
 
 import prisma from "@/lib/db"
 
+
 interface ProgramSchema {
     id?    :  number
     title     :  string
@@ -37,11 +38,28 @@ export async function createProgram(data:ProgramSchema) {
     
 }
 
-export async function fetchPrograms(){
+export async function fetchPrograms(query: {  page?: number, limit?: number, sortField?: string, sortOrder?: 'asc' | 'desc' }) {
+    const { page = 1, limit = 10, sortField = 'title', sortOrder = 'asc' } = query;
+    const offset = (page - 1) * limit;
+    
     try{
-        const programs = await prisma.movie.findMany();
-        console.log('programs fetched:', programs);
-        return programs.map(program => ({ ...program, isActive: true }));;
+    const programs = await prisma.movie.findMany({
+     
+        skip: offset,
+        take: limit,
+        orderBy: {
+            [sortField]: sortOrder,
+        },
+    });
+   const totalPrograms = await prisma.movie.count();
+
+   const programsWithIsActive = programs.map(program => ({ ...program, isActive: true }));
+
+       return{
+              programs:programsWithIsActive,
+              totalPrograms
+         
+       }
     }
     catch(e){
         throw new Error('an Error fetching programs')

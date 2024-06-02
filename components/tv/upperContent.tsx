@@ -9,7 +9,6 @@ import Modal from '@mui/material/Modal';
 import SearchPage from '@/components/tv/searchbar';
 import { useSearchParams } from 'next/navigation';
 
-
 const style = {
   position: 'absolute' as 'absolute',
   top: '50%',
@@ -29,6 +28,7 @@ const style = {
 const Header = () => {
   const searchParams = useSearchParams()
   const selectedChannel = searchParams.get('channelId')
+  const selectedName = searchParams.get('channelName')
   console.log('the channel is ', selectedChannel)
 
   const [value, setValue] = useState(0);
@@ -48,8 +48,8 @@ const Header = () => {
 
   return (
     <>
-        <Typography variant='h6' sx={{ paddingTop: '-10px',marginTop: '3px', marginBottom: '5px' }}>
-          Movies   : {selectedChannel}
+        <Typography variant='h4' sx={{ paddingTop: '-10px',marginTop: '3px', marginBottom: '5px',fontFamily:'italic',fontWeight:'bold' }}>
+          {selectedName}  
         </Typography>
            <Box sx={{ display: 'flex',paddingTop: '-10px',top:'-1px',marginTop: '3px', marginBottom: '5px', alignItems: 'right', paddingLeft:'390px' }}>
             <WbSunnyIcon sx={{ marginRight: 1 }} />
