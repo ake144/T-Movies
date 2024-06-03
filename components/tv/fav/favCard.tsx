@@ -45,7 +45,7 @@ const TvShowCard = ({ movie }: { movie: MovieSchema }) => {
         bgcolor: 'rgba(0, 0, 0, 0.6)'
       }}>
         <Typography variant="body2" color="white" sx={{ position: 'absolute', top: -170, right: 10 }}>
-          {Math.floor(movie.duration / 60)}h {movie.duration % 60}m
+        {`${Math.floor(movie.duration / 60000 / 60)}h ${Math.floor((movie.duration / 60000) % 60)}m`}      
         </Typography>
         <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           <Typography variant="caption" color="error" sx={{ backgroundColor: 'orange', padding: '2px 6px', borderRadius: 1 }}>

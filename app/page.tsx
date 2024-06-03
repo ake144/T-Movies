@@ -30,7 +30,6 @@ function page() {
             >
               Welcome to T-Movies
             </Typography>
-            <MediaSkeleton loading={true}/>
             <Typography
               sx={{ fontFamily: 'sans', color: 'white' }}
               padding={2}

@@ -13,7 +13,7 @@ interface SearchResultsProps {
 }
 
 export default function SearchPage() {
-  const [searchTerm, setSearchTerm] = useState('The Flash');
+  const [searchTerm, setSearchTerm] = useState('T');
   const [results, setResults] = useState<MovieSchema[]>([]);
   const [isSearching, setIsSearching] = useState(false);
   const debouncedSearchTerm = useDebounce(searchTerm, 300);

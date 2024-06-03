@@ -1,15 +1,13 @@
 'use client'
 
 import React, { useState } from "react";
-import { Box, Tabs, Tab } from "@mui/material";
+import { Box, Tabs, Tab, Typography } from "@mui/material";
 import { useRouter } from "next/navigation";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import LiveTvIcon from "@mui/icons-material/LiveTv";
 import Link from "next/link";
-import Image from "next/image";
 
-import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 
 const tabs = [
   { url:"/tv",   label: "Live Watch", icon: <LiveTvIcon /> },
@@ -34,7 +32,9 @@ const DashboardSideBar: React.FC = () => {
     <Box display="flex" flexDirection="column" height="100%">
       <Box p={3} marginTop="50px" marginBottom="70px" color="white" marginLeft="50px">
         <Link href="/tv" passHref>
-          <Image src="/logo.png" alt="logo" width="150" height="100" />
+          <Typography  variant="h5" sx={{fontWeight:'bold'}}>
+                 T-Movie
+          </Typography>
         </Link>
       </Box>
       <Tabs

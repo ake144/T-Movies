@@ -1,9 +1,7 @@
 
 import React from 'react';
 import { Box, CssBaseline } from '@mui/material';
-import { SessionProvider } from "next-auth/react";
 import Sidebar from '@/components/tv/sidebar';
-import { styled } from '@mui/material/styles';
 import SidebarContainer from '@/components/tv/styledSidebar'
 
 interface DashboardLayoutProps {

@@ -42,9 +42,9 @@ const Header = () => {
 
   return (
     <>
-      <AppBar position="static" sx={{ color: 'white', background: '#0b0b1d', marginTop: '40px', marginBottom: '20px' }}>
+      <AppBar position="static" sx={{ color: 'white', background: '#14142b', marginTop: '40px', marginBottom: '20px' }}>
         <Typography variant='h6' sx={{ paddingTop: '5px' }}>
-          Movies
+         Live Tv
         </Typography>
         <Toolbar sx={{ justifyContent: 'space-between', marginTop: '2px', borderBottom: '0.2px solid' }}>
           <Tabs

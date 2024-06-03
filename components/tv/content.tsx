@@ -11,7 +11,7 @@ import { useSearchParams } from 'next/navigation';
 const Content = () => {
 
   return (
-    <Box sx={{ height: '100vh', width: '100%', display: 'flex', flexDirection: 'column', backgroundColor: '#1c1c3b', color: '#ffffff' }}>
+    <Box sx={{ height: '100vh', width: '100%', display: 'flex', flexDirection: 'column', backgroundColor: '#14142b', color: '#ffffff' }}>
       <Grid container sx={{ flex: 1 }}>
         <Grid item xs={12} md={3} sx={{ display: 'flex', flexDirection: 'column' }}>
           <Sidebar />
@@ -19,13 +19,13 @@ const Content = () => {
         <Grid item xs={12} md={9} sx={{ display: 'flex', flexDirection: 'column' }}>
           <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', padding: 2 }}>
             <Header />
-            <>  
-            <Typography variant="h6" sx={{ color: '#ff5722', mb: 1 }}>Featured Film</Typography>
-                <Typography variant="h6" sx={{ fontWeight: 'bold', mb: 1 }}>Don't Miss The Godfather</Typography>
+            <>
+              <Typography variant="h6" sx={{ color: '#ff5722', mb: 1 }}>🎬 Featured Movie</Typography>
+              <Typography variant="h6" sx={{ fontWeight: 'bold', mb: 1 }}>Catch "The Godfather" Tonight!</Typography>
 
-                <Typography variant="h6" sx={{ color: '#ff5722', mb: 1 }}>Upcoming Thrills</Typography>
-                <Typography variant="h6" sx={{ fontWeight: 'bold', mb: 1 }}>Get Ready for UEFA Champions League Final</Typography>
-                </>
+              <Typography variant="h6" sx={{ color: '#ff5722', mb: 1 }}>⚽ Upcoming Events</Typography>
+              <Typography variant="h6" sx={{ fontWeight: 'bold', mb: 1 }}>UEFA Champions League Final - Don't Miss It!</Typography>
+            </>
 
           </Box>
           <Box sx={{ marginTop: 'auto', padding: 2 }}>
