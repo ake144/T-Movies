@@ -3,13 +3,8 @@
 import { Avatar, Box, Typography } from "@mui/material";
 import { signOut } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import { User } from "@/utils/types";
 
-interface User {
-  email: string;
-  role: string | null;
-  username: string;
-
-}
 
 export function LogOut({ user }: { user: User }) {
   const router = useRouter();

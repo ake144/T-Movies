@@ -3,35 +3,35 @@
 import React, { useEffect, useState } from 'react';
 import { PieChart, Cell, Pie, Tooltip, ResponsiveContainer } from 'recharts';
 import { Box, List, ListItem, ListItemIcon, ListItemText } from '@mui/material';
-import { totalFavorites } from '@/utils/actions/addFav'; 
-import { totalWatchLatter } from '@/utils/actions/addWatch';
+import { programCountWithCategory } from '@/utils/actions/count';
 
 const CustomPieChart = () => {
   const [fav, setFav] = useState(0);
   const [watchLater, setWatchLater] = useState(0);
+  const [recommended, setRecommended] = useState(0);
+  const [featured, setFeatured] = useState(0);
 
   useEffect(() => {
     const fetchCategoryCounts = async () => {
       try {
-        const favCount = await totalFavorites();
-        const watchLaterCount = await totalWatchLatter();
-        setFav(favCount ?? 0);
-        setWatchLater(watchLaterCount ?? 0);
-
-        console.log("from the barchart", favCount, watchLaterCount);
+        const counts = await programCountWithCategory();
+        setRecommended(counts.Recommended ?? 0);
+        setFeatured(counts.Featured ?? 0);
+        setFav(counts.Favorites ?? 0);
+        setWatchLater(counts['Watch Later'] ?? 0);
       } catch (error) {
-        console.log(error);
+        console.error('Error fetching category counts:', error);
       }
     };
 
     fetchCategoryCounts();
   }, []);
+
   const data = [
-    { name: 'Recommended', value: 400, color: '#8884d8' },
-    { name: 'Featured', value: 300, color: '#82ca9d' },
+    { name: 'Recommended', value: recommended, color: '#8884d8' },
+    { name: 'Featured', value: featured, color: '#82ca9d' },
     { name: 'Favorites', value: fav, color: '#ffc658' },
     { name: 'Watch Later', value: watchLater, color: '#d0ed57' },
-
   ];
 
   return (

@@ -73,6 +73,8 @@ const MediaTabs = () => {
       setMovieCount(counts.Movies ?? 0);
       setTvShowCount(counts['TV Shows'] ?? 0);
       setSportCount(counts.Sports ?? 0);
+
+      console.log('counts', counts);
     };
 
     fetchData();

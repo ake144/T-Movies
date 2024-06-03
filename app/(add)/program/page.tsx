@@ -19,23 +19,13 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { createProgram } from '@/utils/actions/createProgram'; // Import the server action
 import { redirect, useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
+import { toast, ToastContainer, Slide } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { ProgramSchemaType,ProgramSchema } from '@/utils/types';
+import { categories, channels, types } from '@/utils/seed';
 
-// Zod schema for form validation
-const ProgramSchema = z.object({
-  videoUrl: z.string().url('Invalid URL'),
-  title: z.string().min(1, 'Title is required'),
-  duration: z.number().positive('Duration must be a positive number'),
-  description: z.string().min(5, 'Description is required'),
-  categoryId: z.number().min(1, 'Category is required'),
-  channelId: z.number().min(1, 'Channel is required'),
-  imageUrl: z.string().url('Invalid URL'),
-  typeId: z.number().min(1, 'Type is required')
-});
-
-type ProgramSchemaType = z.infer<typeof ProgramSchema>;
 
 const AddProgram = () => {
-
 
   const { data: session } = useSession({
     required: true,
@@ -49,42 +39,28 @@ const AddProgram = () => {
     resolver: zodResolver(ProgramSchema)
   });
 
-  const categories = [
-    { id: 1, name: 'Recommended' },
-    { id: 2, name: 'Popular' },
-    { id: 3, name: 'Featured' },
-    { id: 4, name: 'Favorites' },
-    { id: 5, name: 'Watch Later' },
-  ];
-
-  const channels = [
-    { id: 1, name: 'HBO' },
-    { id: 2, name: 'ABC TV' },
-    { id: 3, name: 'NBC TV' },
-    { id: 4, name: 'AMC TV' },
-    { id: 5, name: 'Disney' },
-    { id: 6, name: 'FOX' },
-  ];
-
-  const types = [
-    { id: 1, name: 'Live TV' },
-    { id: 2, name: 'Movies' },
-    { id: 3, name: 'TV Shows' },
-    { id: 4, name: 'Sports' },
-  ];
-
   const onSubmit: SubmitHandler<ProgramSchemaType> = async (data) => {
     try {
-      // Ensure duration is a number
+
       const formData = {
         ...data,
         duration: Number(data.duration)
       };
 
       await createProgram(formData);
+      toast.success('Program created successfully', {
+        position: 'top-right',
+        autoClose: 5000,
+        transition: Slide,
+      });
       console.log('Program created successfully');
       reset();
-    } catch (error) {
+    } catch (error:any) {
+      toast.error(error.message, {
+        position: 'top-right',
+        autoClose: 5000,
+        transition: Slide,
+      });
       console.error('Error:', error);
     }
   };
@@ -101,12 +77,13 @@ const AddProgram = () => {
         p: 3,
       }}
     >
-      <Typography variant="h3" sx={{ textAlign: 'center', fontWeight: 'bold', mb: 3 }}>
-        Add Program
-      </Typography>
+      
 
       <Paper sx={{ padding: 3 }}>
         <form onSubmit={handleSubmit(onSubmit)}>
+        <Typography variant="h3" sx={{ textAlign: 'center', fontWeight: 'bold', mb: 3 }}>
+        Add Program
+      </Typography>
           <Grid container spacing={2}>
             <Grid item xs={12} sm={6}>
               <Typography variant='caption' sx={{ textAlign: 'center', mb: 3 }}>
@@ -153,7 +130,6 @@ const AddProgram = () => {
               <Controller
                 name="duration"
                 control={control}
-                defaultValue={10140000}
                 render={({ field }) => (
                   <TextField
                     {...field}

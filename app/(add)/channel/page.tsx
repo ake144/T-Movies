@@ -7,6 +7,8 @@ import { useForm, Controller, SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { createChannel } from '@/utils/actions/createChannel';
 import { useRouter,redirect } from 'next/navigation';
+import 'react-toastify/dist/ReactToastify.css';
+import { toast, ToastContainer, Slide } from 'react-toastify';
 
 import { useSession } from 'next-auth/react'
 const ChannelSchema = z.object({
@@ -33,11 +35,13 @@ function AddChannel() {
 
   const onSubmit: SubmitHandler<ChannelSchemaType> = async (data) => {
     try {
-      await createChannel(data.channelName); // Pass the channelName as an argument
+      await createChannel(data.channelName); 
+      notifySuccess("channel Added successfully"); 
       console.log('Channel added:', data.channelName);
       setChannelName('')
-    } catch (error) {
+    } catch (error: any) { 
       console.error('Error:', error);
+      notifyError(error.message);
     }
   };
 
@@ -45,6 +49,22 @@ function AddChannel() {
     setChannelName('')
     router.push('/admin/channel');
   }
+
+  const notifySuccess = (message: string) => {
+    toast.success(message, {
+        position: 'top-right',
+        autoClose: 5000,
+        transition: Slide,
+    });
+};
+
+const notifyError = (message: string) => {
+    toast.error(message, {
+        position: 'top-right',
+        autoClose: 5000,
+        transition: Slide,
+    });
+};
 
   return (
     <Box
@@ -127,6 +147,8 @@ function AddChannel() {
             </Button>
           </Box>
         </FormControl>
+
+        <ToastContainer />
       </Box>
     </Box>
   );

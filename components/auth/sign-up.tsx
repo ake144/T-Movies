@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 import { Box, TextField, Typography, Button, FormControl, FormHelperText } from "@mui/material";
 import React, { useState } from "react";
@@ -17,11 +17,11 @@ export function SignUpPage() {
   const router = useRouter();
 
   const handleSubmit = async (e: { preventDefault: () => void; }) => {
-          e.preventDefault();
+    e.preventDefault();
     const validationResult = signUpSchema.safeParse({ username, email, password });
 
     if (validationResult.error) {
-      const { message, path } = validationResult.error.errors[0]; // Update 'details' to 'errors'
+      const { message, path } = validationResult.error.errors[0];
       setError((prevState) => ({ ...prevState, [path[0]]: message }));
       notifyError("Validation errors occurred.");
       return;
@@ -30,15 +30,11 @@ export function SignUpPage() {
     try {
       const user = await createUser(username, email, password);
       notifySuccess("User created successfully");
-      // if (user.role === 'admin') {
-      //   router.push('/admin');
-      // } else {
-      //   router.push('/dashboard');
-      // }
+      router.push('/login');
       setUsername("");
       setEmail("");
       setPassword("");
-    } catch (err: any) { // Explicitly type 'err' as 'Error'
+    } catch (err: any) {
       console.error('Error:', err.message);
       notifyError(err.message);
     }
@@ -66,15 +62,19 @@ export function SignUpPage() {
       justifyContent="center"
       alignItems="center"
       height="100vh"
+      sx={{
+        backgroundColor: '#f0f0f0',
+      }}
     >
       <Box
         sx={{
-          width: '50%',
+          width: { xs: '100%', sm: '75%', md: '50%' },
           maxWidth: '100%',
           backgroundColor: 'white',
-          padding: 4,
+          padding: { xs: 2, md: 4 },
           borderRadius: 2,
           boxShadow: 3,
+          margin: { xs: 2, md: 0 },
         }}
         component="form"
         onSubmit={handleSubmit}
@@ -95,7 +95,6 @@ export function SignUpPage() {
                 '&:hover fieldset': { borderColor: 'black' },
                 '&.Mui-focused fieldset': { borderColor: 'black' },
               },
-              color:'black'
             }}
             value={username}
             onChange={(e) => setUsername(e.target.value)}
@@ -116,7 +115,6 @@ export function SignUpPage() {
                 '&:hover fieldset': { borderColor: 'black' },
                 '&.Mui-focused fieldset': { borderColor: 'black' },
               },
-              color:'black'
             }}
             value={email}
             onChange={(e) => setEmail(e.target.value)}
@@ -137,7 +135,6 @@ export function SignUpPage() {
                 '&:hover fieldset': { borderColor: 'black' },
                 '&.Mui-focused fieldset': { borderColor: 'black' },
               },
-              color:'black'
             }}
             type="password"
             value={password}
@@ -149,15 +146,15 @@ export function SignUpPage() {
         <Button
           fullWidth
           variant="contained"
-          sx={{ marginTop: 2, backgroundColor: 'black', color: 'white'}}
+          sx={{ marginTop: 2, backgroundColor: 'black', color: 'white' }}
           type="submit"
         >
           Sign Up
         </Button>
-        <Typography sx={{ color: 'black', textAlign: 'center', marginTop: 2, width:'180px' }}  gutterBottom>
-          Do you have an account?
-          < Link href="/login">
-              Login
+        <Typography sx={{ color: 'black', textAlign: 'center', marginTop: 2 }}>
+          Do you have an account?{' '}
+          <Link href="/login" style={{ textDecoration: 'none', color: '#1976d2' }}>
+            Login
           </Link>
         </Typography>
 

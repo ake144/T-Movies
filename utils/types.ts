@@ -12,6 +12,7 @@ export const ProgramSchema = z.object({
   channelId: z.number().min(1, 'Channel is required'),
   typeId: z.number().min(1, 'Type is required'),
   categoryId: z.number().min(1, 'Category is required'),
+  imageUrl:z.string().optional()
 });
 
 export type ProgramSchemaType = z.infer<typeof ProgramSchema>;
@@ -71,4 +72,11 @@ export interface WatchLaterSchema {
   id: number,
   movieId: number,
   userEmail: string
+}
+
+export interface User {
+  email: string;
+  role: string | null;
+  username: string;
+
 }

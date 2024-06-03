@@ -2,14 +2,18 @@
 
 import * as React from 'react';
 import { useDebounce } from '@uidotdev/usehooks';
-import { TextField, Button, CircularProgress, Container, Typography } from '@mui/material';
+import { TextField, Button, CircularProgress, Container, Typography, Box } from '@mui/material';
 import SearchResults from './searchResult';
 import { searchMovies } from '@/utils/actions/searchMovies';
 import { useEffect, useState } from 'react';
 import { MovieSchema } from '@/utils/types';
 
+interface SearchResultsProps {
+  results: MovieSchema[];
+}
+
 export default function SearchPage() {
-  const [searchTerm, setSearchTerm] = useState('steve');
+  const [searchTerm, setSearchTerm] = useState('The Flash');
   const [results, setResults] = useState<MovieSchema[]>([]);
   const [isSearching, setIsSearching] = useState(false);
   const debouncedSearchTerm = useDebounce(searchTerm, 300);
@@ -47,8 +51,9 @@ export default function SearchPage() {
 
     search();
   }, [debouncedSearchTerm]);
+
   return (
-    <Container>
+    <Container sx={{ display: 'flex', flexDirection: 'column', height: '100vh', overflow: 'hidden' }}>
       <Typography variant="h4" component="h1" gutterBottom>
         Movie Search
       </Typography>
@@ -72,7 +77,9 @@ export default function SearchPage() {
           {isSearching ? <CircularProgress size={24} /> : 'Search'}
         </Button>
       </form>
-      <SearchResults results={results} />
+      <Box sx={{ flex: 1, overflow: 'auto', mt: 2 }}>
+        <SearchResults results={results} />
+      </Box>
     </Container>
   );
 }

@@ -9,15 +9,15 @@ interface SearchResultsProps {
 
 const SearchResults: React.FC<SearchResultsProps> = ({ results }) => {
   return (
-    <Paper style={{ marginTop: '1rem', padding: '1rem' }}>
-      <Typography variant="h6" sx={{ fontSize:'bold'}}>Search Results  from All Channel</Typography>
+    <Paper style={{ padding: '1rem', display: 'flex', flexDirection: 'column', height: '100%', overflow: 'auto' }}>
+      <Typography variant="h6" sx={{ fontWeight: 'bold' }}>Search Results from All Channel</Typography>
       {results.length > 0 ? (
         <List>
           {results.map((movie: MovieSchema) => (
-            <Link href={movie.videoUrl} >
-                <ListItem key={movie.id}>
-                  <ListItemText primary={movie.title} secondary={movie.description} />
-                </ListItem>
+            <Link href={movie.videoUrl} key={movie.id}>
+              <ListItem button component="a">
+                <ListItemText primary={movie.title} secondary={movie.description} />
+              </ListItem>
             </Link>
           ))}
         </List>

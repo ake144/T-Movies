@@ -19,11 +19,14 @@ const Content = () => {
         <Grid item xs={12} md={9} sx={{ display: 'flex', flexDirection: 'column' }}>
           <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', padding: 2 }}>
             <Header />
-            <Typography variant="h4">Now Playing</Typography>
-            <Typography variant="h6">Grey's Anatomy</Typography>
-            <Typography variant="body1">
-              Grey's Anatomy is an American medical drama television series that premiered on March 27, 2005, on ABC as a mid-season replacement.
-            </Typography>
+            <>  
+            <Typography variant="h6" sx={{ color: '#ff5722', mb: 1 }}>Featured Film</Typography>
+                <Typography variant="h6" sx={{ fontWeight: 'bold', mb: 1 }}>Don't Miss The Godfather</Typography>
+
+                <Typography variant="h6" sx={{ color: '#ff5722', mb: 1 }}>Upcoming Thrills</Typography>
+                <Typography variant="h6" sx={{ fontWeight: 'bold', mb: 1 }}>Get Ready for UEFA Champions League Final</Typography>
+                </>
+
           </Box>
           <Box sx={{ marginTop: 'auto', padding: 2 }}>
             <MediaTabs />

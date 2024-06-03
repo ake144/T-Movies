@@ -1,6 +1,7 @@
 import React from 'react'
 import { SignUpPage }  from '@/components/auth/sign-up'
 import { Box, Typography } from '@mui/material';
+import { Image } from '@mui/icons-material';
 
 
 function page() {
@@ -21,21 +22,15 @@ function page() {
             height="100%"
             sx={{ paddingLeft: '17%' }}
           >
+            <img src="/logo.png" alt="logo" width="150" height="100" />
+           
             <Typography
               sx={{ fontFamily: 'sans', color: 'white' }}
               padding={2}
-              variant="h5"
+              variant="h3"
               gutterBottom
             >
-              Welcome to T-Movies
-            </Typography>
-            <Typography
-              sx={{ fontFamily: 'sans', color: 'white' }}
-              padding={2}
-              variant="h6"
-              gutterBottom
-            >
-              Watch your favorite movies and shows
+              T-Movie
             </Typography>
           </Box>
           <Box width="100%">

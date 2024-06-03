@@ -81,7 +81,7 @@ const notifyError = (message: string) => {
           width: '50%',
           maxWidth: '100%',
           backgroundColor: 'white',
-          padding: 4,
+          padding: 3,
           borderRadius: 2,
           boxShadow: 3,
         }}

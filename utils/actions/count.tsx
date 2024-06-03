@@ -2,6 +2,13 @@
 
 import prisma from "@/lib/db";
 
+
+interface CategoryCount {
+  [key: string]: number;
+}
+
+
+
 export async function users() {
   try {
     const userCount = await prisma.user.findMany();
@@ -57,6 +64,30 @@ export async function programs() {
     throw error;
   }
 }
+
+
+
+  export async function programCountWithCategory(): Promise<CategoryCount> {
+    try {
+      const categoryCounts = await prisma.category.findMany({
+        include: {
+          _count: {
+            select: { movie: true },
+          },
+        },
+      });
+  
+      const counts: CategoryCount = categoryCounts.reduce((acc: CategoryCount, category) => {
+        acc[category.name] = category._count.movie;
+        return acc;
+      }, {});
+  
+      return counts;
+    } catch (error) {
+      console.error('Error on counting programs:', error);
+      throw error;
+    }
+  }
 
 export async function channels() {
   try {

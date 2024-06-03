@@ -27,10 +27,12 @@ async function main() {
     { name: 'Favorites' },
     { name: 'Watch Later' }
   ];
+  const createdChannels = await prisma.channel.createMany({ data: channels });
+  const createdTypes = await prisma.type.createMany({ data: types });
+  const createdCategories = await prisma.category.createMany({ data: categories });
 
-  await prisma.channel.createMany({ data: channels });
-  await prisma.type.createMany({ data: types });
-  await prisma.category.createMany({ data: categories });
+  return { channels: createdChannels, types: createdTypes, categories: createdCategories };
+
 }
 
 main()
