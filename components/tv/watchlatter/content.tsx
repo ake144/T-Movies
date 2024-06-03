@@ -39,7 +39,7 @@ function WatchLater() {
         </Box>
         <Grid container spacing={2} justifyContent="center">
           {loading ? (
-            <MediaSkeleton loading={true} />
+            <MediaSkeleton loading={loading} />
           ) : watchLater.length === 0 ? (
             <p>No movies found</p>
           ) : (
