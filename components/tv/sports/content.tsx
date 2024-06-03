@@ -7,7 +7,7 @@ import { Grid, Paper,Box } from '@mui/material'
 import { useSearchParams } from 'next/navigation'
 import { getSport } from  '@/utils/actions/createProgram' 
 import { MovieSchema } from '@/utils/types'
-
+import MediaSkeleton from '@/components/skeleton'
 
 function Sports() {
 const [sports,setSports] = useState<MovieSchema[]>([])
@@ -42,7 +42,7 @@ catch(error){
         <Grid item xs={12}>
             <Grid container justifyContent="center" spacing={2}>
                 {loading ? (
-                    <p>Loading...</p>
+                    <MediaSkeleton loading={true}/>
                 ) : sports.length === 0 ? (
                     <p>No movies found</p>
                 ) : (

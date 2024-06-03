@@ -7,7 +7,7 @@ import { Grid, Paper,Box } from '@mui/material'
 import { useSearchParams } from 'next/navigation'
 import getMovies from  '@/utils/actions/fetchMovies' 
 import { MovieSchema } from '@/utils/types'
-
+import MediaSkeleton from '@/components/skeleton'
 
 function Movies() {
 const [movies,setMovies] = useState<MovieSchema[]>([])
@@ -43,7 +43,7 @@ catch(error){
       <Grid item xs={12}>
         <Grid container justifyContent="center" spacing={2}>
           {loading ? (
-                <p>Loading...</p>
+                 <MediaSkeleton loading={true}/>
               ) : movies.length === 0 ? (
                 <p>No movies found</p>
               ) : (

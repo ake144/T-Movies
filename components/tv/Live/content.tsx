@@ -7,6 +7,7 @@ import { Grid, Paper,Box } from '@mui/material'
 import { useSearchParams } from 'next/navigation'
 import {getLiveTv} from  '@/utils/actions/createProgram' 
 import { MovieSchema } from '@/utils/types'
+import MediaSkeleton from '@/components/skeleton'
 
 
 function LiveTv() {
@@ -43,7 +44,7 @@ catch(error){
         <Grid item xs={12}>
             <Grid container justifyContent="center" spacing={2}>
                 {loading ? (
-                    <p>Loading...</p>
+                     <MediaSkeleton loading={true}/>
                 ) : LiveTv.length === 0 ? (
                     <p>No movies found</p>
                 ) : (

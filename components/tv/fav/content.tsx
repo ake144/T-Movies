@@ -6,6 +6,7 @@ import Header from './navBar'
 import { Grid, Paper,Box } from '@mui/material'
 import { MovieSchema } from '@/utils/types'
 import { useSession } from 'next-auth/react'
+import MediaSkeleton from '@/components/skeleton'
 import { getFavorites } from '@/utils/actions/addFav'
 
 
@@ -43,7 +44,7 @@ function FavMovies() {
       <Grid item xs={12}>
         <Grid container justifyContent="center" spacing={2}>
             {  Loading ? (
-                <p>Loading...</p>
+               <MediaSkeleton loading={true}/>
               ) : favMovie.length === 0 ? (
                 <p>No movies found</p>
               ) : (

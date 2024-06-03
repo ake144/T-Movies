@@ -1,6 +1,7 @@
 import React from 'react'
 import { LoginPage }  from '@/components/auth/login-form'
 import { Box, Typography } from '@mui/material';
+import MediaSkeleton from '@/components/skeleton'
 
 
 function page() {
@@ -29,6 +30,7 @@ function page() {
             >
               Welcome to T-Movies
             </Typography>
+            <MediaSkeleton loading={true}/>
             <Typography
               sx={{ fontFamily: 'sans', color: 'white' }}
               padding={2}
