@@ -135,3 +135,24 @@ export const getMovieCountsByType = async () => {
     throw new Error('Could not fetch movie counts by type');
   }
 };
+
+export const watchLaterCount = async () => {
+  try {
+    const watchLaterCount = await prisma.watchLater.count();
+    return watchLaterCount;
+  } catch (error) {
+    console.error('Error on counting watch later:', error);
+    throw error;
+  }
+}
+
+export const favoriteCount = async () => {
+  try {
+    const favoriteCount = await prisma.favorites.count();
+    return favoriteCount;
+    
+  } catch (error) {
+    console.error('Error on counting favorites:', error);
+    throw error;
+  }
+}

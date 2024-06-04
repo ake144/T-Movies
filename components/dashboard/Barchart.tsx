@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import { PieChart, Cell, Pie, Tooltip, ResponsiveContainer } from 'recharts';
 import { Box, List, ListItem, ListItemIcon, ListItemText } from '@mui/material';
-import { programCountWithCategory } from '@/utils/actions/count';
+import { programCountWithCategory, favoriteCount, watchLaterCount  } from '@/utils/actions/count';
 
 const CustomPieChart = () => {
   const [fav, setFav] = useState(0);
@@ -12,19 +12,24 @@ const CustomPieChart = () => {
   const [featured, setFeatured] = useState(0);
 
   useEffect(() => {
-    const fetchCategoryCounts = async () => {
+    const fetchData = async () => {
       try {
-        const counts = await programCountWithCategory();
+        const [counts, favCounts, watchLaterCounts] = await Promise.all([
+          programCountWithCategory(),
+          favoriteCount(),
+          watchLaterCount()
+        ]);
+        
         setRecommended(counts.Recommended ?? 0);
         setFeatured(counts.Featured ?? 0);
-        setFav(counts.Favorites ?? 0);
-        setWatchLater(counts['Watch Later'] ?? 0);
+        setFav(favCounts ?? 0);
+        setWatchLater(watchLaterCounts ?? 0);
       } catch (error) {
         console.error('Error fetching category counts:', error);
       }
     };
 
-    fetchCategoryCounts();
+    fetchData();
   }, []);
 
   const data = [
