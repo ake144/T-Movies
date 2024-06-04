@@ -1,16 +1,13 @@
 'use client'
 
 import { FC, useEffect, useState } from 'react';
-import { Box, Paper, Typography, TextField, Grid, Button } from '@mui/material';
+import { Box, Paper, Typography, TextField, Grid, Button, Tooltip } from '@mui/material';
 
 // import io from 'socket.io-client';
 import { Group, LiveTv, Dvr, FileDownload, FilterList, Add } from '@mui/icons-material';
 import CustomPieChart from './Barchart'
 import CustomLineChart from './LinChart'
-import { PieChart, Pie,Legend, Tooltip, LineChart, Line, CartesianGrid, XAxis, YAxis } from 'recharts';
 import { channels, programsCount, users } from '@/utils/actions/count';
-import { set } from 'zod';
-import { ChannelSchema } from '@/utils/types';
 import Link from 'next/link';
 
 
@@ -20,9 +17,7 @@ const DashboardPage: FC = () => {
   const [userCount, setUserCount] = useState(0);
   const [programCount, setProgramCount] = useState(0);
   const [channelCount, setChannelCount] = useState(0);
-  const [programCategories, setProgramCategories] = useState([]);
-  const [programTypes, setProgramTypes] = useState([]);
-  const [searchQuery, setSearchQuery] = useState('');
+
 
   useEffect(() => {
     const fetchCounts = async () => {
@@ -49,6 +44,7 @@ const DashboardPage: FC = () => {
     <>
        <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
         <form >
+        <Tooltip title="Sorry, nothing to search here">
           <TextField 
             label="Search" 
             disabled={true}
@@ -57,18 +53,24 @@ const DashboardPage: FC = () => {
             variant="outlined" 
             size="small" 
           />
+          </Tooltip>
         </form>
         <Box>
-          <Button variant="outlined" startIcon={<FileDownload />} color="primary" sx={{ mr: 1 }}>
+        <Tooltip title="Sorry, come back soon">
+          <Button variant="outlined" startIcon={<FileDownload />} color="primary" sx={{ mr: 1, display:{sm:'none', xs:'none', md:'inline'} }}>
             Export
           </Button>
-          <Button variant="outlined" startIcon={<FilterList />} color="primary" sx={{ mr: 1 }}>
+          </Tooltip>
+          <Tooltip title="Sorry, come back soon ">
+          <Button variant="outlined" startIcon={<FilterList />} color="primary" sx={{ mr: 1, display:{sm:'none', xs:'none', md:'inline'} }}>
             Add Filter
           </Button>
-
+          </Tooltip>
+          <Tooltip title="Sorry, come back soon">
             <Button variant="contained" startIcon={<Add />} color="primary">
               Add filter
             </Button>
+            </Tooltip>
 
         </Box>
       </Box>

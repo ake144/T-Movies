@@ -20,6 +20,8 @@ import { Menu as MenuIcon, Home as HomeIcon, Folder as FolderIcon, Settings as S
 import { useTheme } from '@mui/material/styles';
 import { useState } from 'react';
 import { usePathname } from 'next/navigation';
+import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
+
 
 export default function DashboardTopNav({ children }: { children: ReactNode }) {
   const [open, setOpen] = useState(false);
@@ -75,6 +77,11 @@ export default function DashboardTopNav({ children }: { children: ReactNode }) {
           >
           </IconButton>
           <Typography variant="h6" sx={{ flexGrow: 1, marginLeft:'30px' }}>
+            <IconButton sx={{ color: '#ff5722', marginRight: '8px',display: { xs: 'none', sm: 'block', md: 'none', lg: 'none' } }}>
+                <Link href='/admin'>
+                    <ArrowBackIosIcon />
+                </Link>
+            </IconButton>
             {pathname}
           </Typography>
           <IconButton color="inherit">

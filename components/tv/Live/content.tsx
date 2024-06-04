@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from 'react'
 import LiveTvCard from './liveCard'
 import Header from './navBar'
-import { Grid, Paper,Box } from '@mui/material'
+import { Grid, Paper,Box, Typography } from '@mui/material'
 import { useSearchParams } from 'next/navigation'
 import {getLiveTv} from  '@/utils/actions/createProgram' 
 import { MovieSchema } from '@/utils/types'
@@ -46,7 +46,9 @@ catch(error){
                 {loading ? (
                      <MediaSkeleton loading={true}/>
                 ) : LiveTv.length === 0 ? (
-                    <p>No movies found</p>
+                  <Typography variant='h3'  sx={{ width:'100%', marginTop:'140px', padding:'80px', justifyContent:'center', alignItems:'center'}}>
+                  No Live Tv program found
+                </Typography>
                 ) : (
                     LiveTv.map((movie) => (
                     <Grid key={movie.id} item>        

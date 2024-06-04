@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { Tabs, Tab, Box, Typography } from '@mui/material';
+import { Tabs, Box, Typography } from '@mui/material';
 import LiveTvIcon from '@mui/icons-material/LiveTv';
 import MovieIcon from '@mui/icons-material/Movie';
 import TvIcon from '@mui/icons-material/Tv';
 import SportsIcon from '@mui/icons-material/Sports';
-import { useSearchParams, useRouter } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { channels, programs } from '@/utils/actions/count';
 
@@ -48,20 +48,20 @@ const MediaTabs = () => {
     borderRadius: '8px',
     alignItems: 'center',
     justifyContent: 'center',
-    width: '180px',
+    width: { xs: '120px', sm: '150px', md: '180px' },
     mx: '4px',
-    marginLeft: '14px',
-    height: '220px',
+    height: { xs: '150px', sm: '180px', md: '220px' },
     color: '#ffffff',
     backgroundColor: '#2f2f5d',
     display: 'flex',
     flexDirection: 'column',
     textDecoration: 'none',
+    flexShrink: 0,
   };
 
   const tabLabelStyle = {
     marginTop: '16px',
-    fontSize: '14px',
+    fontSize: { xs: '10px', sm: '12px', md: '14px' },
   };
 
   useEffect(() => {
@@ -88,16 +88,39 @@ const MediaTabs = () => {
   };
 
   return (
-    <Box display="flex" justifyContent="center" alignItems="center">
+    <Box
+      sx={{
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        width: '100%',
+        overflowX: 'auto',
+        scrollbarWidth: 'none',
+        '&::-webkit-scrollbar': {
+          display: 'none',
+        },
+      }}
+    >
       <Tabs
         value={value}
         onChange={handleChange}
         indicatorColor="primary"
         textColor="primary"
-        variant="fullWidth"
+        variant="scrollable"
+        scrollButtons={false}
         aria-label="media tabs"
+        sx={{
+          display: 'flex',
+          justifyContent: 'start',
+          width: '100%',
+          padding: { xs: '8px 0', sm: '8px 0', md: '0' },
+          overflowX: 'auto',
+          scrollbarWidth: 'none',
+          '&::-webkit-scrollbar': {
+            display: 'none',
+          },
+        }}
         TabIndicatorProps={{ style: { display: 'none' } }}
-        sx={{ display: 'flex', justifyContent: 'center' }}
       >
         <Link href={constructUrl('/tv/live', '1')}>
           <Box sx={tabStyle}>

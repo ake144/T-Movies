@@ -38,6 +38,7 @@ interface ProgramSchema {
   channelId: number;
   typeId: number;
   categoryId: number;
+  imageUrl: string | null;
 }
 
 const Program = () => {
@@ -159,10 +160,10 @@ const Program = () => {
           />
         </form>
         <Box>
-          <Button variant="outlined" startIcon={<FileDownload />} color="primary" sx={{ mr: 1 }}>
+          <Button variant="outlined" startIcon={<FileDownload />} color="primary" sx={{ mr: 1, display:{sm:'none', xs:'none', md:'inline'}}}>
             Export
           </Button>
-          <Button variant="outlined" startIcon={<FilterList />} color="primary" sx={{ mr: 1 }}>
+          <Button variant="outlined" startIcon={<FilterList />} color="primary" sx={{ mr: 1, display:{sm:'none', xs:'none', md:'inline'}}}>
             Add Filter
           </Button>
           <Link href='/program'>

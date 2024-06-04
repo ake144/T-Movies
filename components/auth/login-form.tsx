@@ -3,7 +3,6 @@
 import { Box, TextField, Typography, Button, FormControl, FormHelperText } from "@mui/material";
 import React, { useState } from "react";
 import { signInSchema } from "../../utils/types";
-import loginUser from "../../utils/actions/login"; 
 import { toast, ToastContainer, Slide } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Link from "next/link";
@@ -81,7 +80,7 @@ const notifyError = (message: string) => {
           width: '50%',
           maxWidth: '100%',
           backgroundColor: 'white',
-          padding: 3,
+          padding: 2,
           borderRadius: 2,
           boxShadow: 3,
         }}

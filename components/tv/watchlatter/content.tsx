@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import TvShowCard from './cards';
 import Header from './navbar';
-import { Grid, Box } from '@mui/material';
+import { Grid, Box,Typography } from '@mui/material';
 import { useSession } from 'next-auth/react';
 import { getWatchLaterMovies } from '@/utils/actions/addWatch';
 import { MovieSchema } from '@/utils/types';
@@ -42,7 +42,9 @@ function WatchLater() {
           {loading ? (
             <MediaSkeleton loading={loading} />
           ) : watchLater.length === 0 ? (
-            <p>No movies found</p>
+            <Typography variant='h3'  sx={{ width:'100%', marginTop:'140px', padding:'80px', justifyContent:'center', alignItems:'center'}}>
+            No Watch Later found
+          </Typography>
           ) : (
             watchLater.map((movie) => (
               <Grid key={movie.id} item>

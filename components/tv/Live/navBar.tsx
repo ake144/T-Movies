@@ -7,6 +7,7 @@ import WbSunnyIcon from '@mui/icons-material/WbSunny';
 import Link from 'next/link';
 import Modal from '@mui/material/Modal';
 import SearchPage from '@/components/tv/searchbar';
+import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 
 const style = {
   position: 'absolute' as 'absolute',
@@ -44,6 +45,11 @@ const Header = () => {
     <>
       <AppBar position="static" sx={{ color: 'white', background: '#14142b', marginTop: '40px', marginBottom: '20px' }}>
         <Typography variant='h6' sx={{ paddingTop: '5px' }}>
+        <IconButton sx={{ color: '#ff5722', marginRight: '8px',display: { xs: 'none', sm: 'block', md: 'none', lg: 'none' } }}>
+              <Link href='/tv'>
+                  <ArrowBackIosIcon />
+              </Link>
+          </IconButton>
          Live Tv
         </Typography>
         <Toolbar sx={{ justifyContent: 'space-between', marginTop: '2px', borderBottom: '0.2px solid' }}>
@@ -60,13 +66,14 @@ const Header = () => {
             <Tab label="Featured" />
           </Tabs>
           <Box sx={{ display: 'flex', paddingBottom: '60px', alignItems: 'center' }}>
-            <WbSunnyIcon sx={{ marginRight: 1 }} />
-            <Typography variant="body2">18°</Typography>
-            <Typography variant="body2" sx={{ margin: '0 8px' }}>
-              {new Date().toLocaleTimeString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })}
-            </Typography>
-            <Typography variant="body2"> {new Date().toLocaleTimeString('en-US', { day: 'numeric', month: 'short', dayPeriod: 'short' })}</Typography>
-            <IconButton onClick={handleOpen} sx={{ color: 'white', marginLeft: 2 }}>
+          <WbSunnyIcon sx={{ display: { xs: 'none', sm: 'none', md: 'none', lg: 'block' },marginRight: 0.5 }} />
+            <Typography variant="body2" sx={{ display: { xs: 'none', sm: 'none', md: 'block', lg: 'block' }}}>18°</Typography>
+            <Typography
+                  variant="body2"
+                  sx={{ margin: '0 8px',display: { xs: 'none', sm: 'none', md: 'block', lg: 'block' }}}>
+                  {new Date().toLocaleTimeString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })}
+                </Typography>
+            <Typography variant="body2" sx={{ display: { xs: 'none', sm: 'none', md: 'block', lg: 'block' }}}> {new Date().toLocaleTimeString('en-US', { day: 'numeric', month: 'short', dayPeriod: 'short' })}</Typography>            <IconButton onClick={handleOpen} sx={{ color: 'white', marginLeft: 2 }}>
               <SearchIcon />
             </IconButton>
             <Link href='/profile'>

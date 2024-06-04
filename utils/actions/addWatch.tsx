@@ -1,16 +1,7 @@
 'use server'
 
 import prisma from '@/lib/db';
-
-interface MovieSchema {
-  title: string;
-  duration: number;
-  description: string;
-  channelId: number;
-  typeId: number;
-  categoryId: number;
-  videoUrl: string;
-}
+import { MovieSchema } from '../types';
 
 export async function addMovieToWatchLater(movieId: number, userEmail: string) {
   try {

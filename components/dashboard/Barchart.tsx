@@ -35,8 +35,8 @@ const CustomPieChart = () => {
   ];
 
   return (
-    <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-      <ResponsiveContainer width="50%" height={200}>
+    <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', }}>
+      <ResponsiveContainer  width="50%"  height={200}>
         <PieChart>
           <Pie
             data={data}
@@ -62,9 +62,9 @@ const CustomPieChart = () => {
           {data.map((entry, index) => (
             <ListItem key={`item-${index}`} sx={{ display: 'flex', alignItems: 'center' }}>
               <ListItemIcon>
-                <Box sx={{ width: 20, height: 20, backgroundColor: entry.color, borderRadius: '100%' }} />
+                <Box sx={{ width:  {md:'20px', xs:'10px', sm:'15px'}, height: {md:'20px', xs:'10px', sm:'15px'}, backgroundColor: entry.color, borderRadius: '100%' }} />
               </ListItemIcon>
-              <ListItemText primary={entry.name} sx={{ marginRight: 2 }} />
+              <ListItemText primary={entry.name} sx={{ marginRight: {md:'2px', sm:'1px',xs:'.5px'} }} />
               <ListItemText primary={entry.value} />
             </ListItem>
           ))}

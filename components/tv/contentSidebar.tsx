@@ -1,3 +1,5 @@
+'use client';
+
 import React from 'react';
 import { List, ListItem, ListItemIcon, ListItemText, Typography, Box } from '@mui/material';
 import { styled } from '@mui/system';
@@ -8,8 +10,7 @@ import {
   Tv as TvIcon,
   Sports as SportsIcon,
 } from '@mui/icons-material';
-import { useRouter, useSearchParams, usePathname } from 'next/navigation';
-import Link from 'next/link';
+import { useRouter, useSearchParams } from 'next/navigation';
 
 const channels = [
   { id: 1, name: 'FOX TV', icon: <HomeIcon /> },
@@ -30,8 +31,14 @@ const SidebarContainer = styled(Box)(({ theme }) => ({
   display: 'flex',
   flexDirection: 'column',
   backgroundColor: '#14142b',
-  overflow: 'auto',
-  scrollbarWidth: 'none',
+  overflow: 'hidden', // Hide overflow initially
+  '&:hover': {
+    overflow: 'auto', // Show overflow on hover
+  },
+  scrollbarWidth: 'none', // Firefox
+  '&::-webkit-scrollbar': {
+    display: 'none', // Chrome, Safari, and Opera
+  },
 }));
 
 const SelectedListItem = styled(ListItem)(({ theme, selected }) => ({
@@ -46,7 +53,7 @@ const Sidebar = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const selectedChannel = Number(searchParams.get('channelId'));
-  const selectedCategory = Number(searchParams.get('categoryId'))
+  const selectedCategory = Number(searchParams.get('categoryId'));
 
   const handleChannelClick = (id: number) => {
     router.push(`?categoryId=${selectedCategory}&channelId=${id}&channelName=${channels.find((channel) => channel.id === id)?.name}`);
@@ -54,20 +61,76 @@ const Sidebar = () => {
 
   return (
     <SidebarContainer>
-      <List>
+      <List
+        sx={{
+          display: 'flex',
+          flexDirection: {
+            xs: 'row',
+            sm: 'row',
+            md: 'column',
+            lg: 'column',
+            xl: 'column',
+          },
+          overflowX: {
+            xs: 'auto',
+            sm: 'auto',
+            md: 'hidden',
+            lg: 'hidden',
+            xl: 'hidden',
+          },
+          overflowY: {
+            xs: 'hidden',
+            sm: 'hidden',
+            md: 'auto',
+            lg: 'auto',
+            xl: 'auto',
+          },
+          padding: 0,
+          width: '100%',
+          scrollbarWidth: 'none',
+          '&::-webkit-scrollbar': {
+            display: 'none',
+          },
+        }}
+      >
         {channels.map((channel) => (
           <SelectedListItem
             key={channel.id}
             selected={selectedChannel === channel.id}
             onClick={() => handleChannelClick(channel.id)}
+            sx={{
+              flex: {
+                xs: '0 0 auto',
+                sm: '0 0 auto',
+                md: 'unset',
+              },
+              width: {
+                xs: '150px',
+                sm: '150px',
+                md: 'unset',
+              },
+              marginBottom: {
+                xs: 0,
+                sm: 0,
+                md: '2px',
+              },
+            }}
           >
             <ListItemIcon
               sx={{
                 color: selectedChannel === channel.id ? '#ffffff' : '#a9a9c4',
                 borderRadius: '50%',
                 backgroundColor: selectedChannel === channel.id ? '#1f1f3d' : 'transparent',
-                height: '70px',
-                width: '70px',
+                height: {
+                  md: '70px',
+                  sm: '40px',
+                  xs: '40px',
+                },
+                width: {
+                  md: '70px',
+                  sm: '40px',
+                  xs: '40px',
+                },
                 alignItems: 'center',
                 justifyContent: 'center',
               }}

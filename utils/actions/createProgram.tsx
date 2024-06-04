@@ -2,23 +2,13 @@
 
 
 import prisma from "@/lib/db"
+import { MovieSchema } from "@/utils/types"
 
 
-interface ProgramSchema {
-    id?    :  number
-    title     :  string
-    duration  :  number
-    description : string
-    channelId  : number
-    typeId    :  number
-    categoryId : number
-    videoUrl   : string
-}
 
-
-export async function createProgram(data:ProgramSchema) {
+export async function createProgram(data:MovieSchema) {
   try{
-    const program:ProgramSchema = await prisma.movie.create({
+    const program:MovieSchema = await prisma.movie.create({
         data:{
             title:data.title,
             duration : data.duration,
@@ -83,7 +73,7 @@ export async function deletePrograms(id:number){
 
 }
 
-export async function updatePrograms(id:number, data:ProgramSchema) {
+export async function updatePrograms(id:number, data:MovieSchema) {
     try{
         const program = await prisma.movie.update({
             where:{

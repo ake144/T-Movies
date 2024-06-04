@@ -52,12 +52,14 @@ const Header = () => {
           {selectedName}  
         </Typography>
            <Box sx={{ display: 'flex',paddingTop: '-10px',top:'-1px',marginTop: '3px', marginBottom: '5px', alignItems: 'right', paddingLeft:'390px' }}>
-            <WbSunnyIcon sx={{ marginRight: 1 }} />
-            <Typography variant="body2">18°</Typography>
-            <Typography variant="body2" sx={{ margin: '0 8px' }}>
-              {new Date().toLocaleTimeString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })}
-            </Typography>
-            <Typography variant="body2"> {new Date().toLocaleTimeString('en-US', { day: 'numeric', month: 'short', dayPeriod: 'short' })}</Typography>
+           <WbSunnyIcon sx={{ display: { xs: 'none', sm: 'none', md: 'none', lg: 'block' },marginRight: 0.5 }} />
+            <Typography variant="body2" sx={{ display: { xs: 'none', sm: 'none', md: 'block', lg: 'block' }}}>18°</Typography>
+            <Typography
+                  variant="body2"
+                  sx={{ margin: '0 8px',display: { xs: 'none', sm: 'none', md: 'block', lg: 'block' }}}>
+                  {new Date().toLocaleTimeString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })}
+                </Typography>
+            <Typography variant="body2" sx={{ display: { xs: 'none', sm: 'none', md: 'block', lg: 'block' }}}> {new Date().toLocaleTimeString('en-US', { day: 'numeric', month: 'short', dayPeriod: 'short' })}</Typography>
             <IconButton onClick={handleOpen} sx={{ color: 'white', marginLeft: 2,paddingBottom:'3px' }}>
               <SearchIcon />
             </IconButton>

@@ -29,10 +29,10 @@ const DashboardSideBar: React.FC = () => {
   };
 
   return (
-    <Box display="flex" flexDirection="column" height="100%">
+    <Box display="flex" flexDirection="column" height="100vh">
       <Box p={3} marginTop="50px" marginBottom="70px" color="white" marginLeft="50px">
         <Link href="/tv" passHref>
-          <Typography  variant="h5" sx={{fontWeight:'bold'}}>
+          <Typography  variant="h5" sx={{fontWeight:'bold', fontSize:{ md:'12px', xl:'27px', lg:'25px'}}}>
                  T-Movie
           </Typography>
         </Link>

@@ -1,7 +1,7 @@
 import React from 'react'
 import { LoginPage }  from '@/components/auth/login-form'
 import { Box, Typography } from '@mui/material';
-import MediaSkeleton from '@/components/skeleton'
+
 
 
 function page() {

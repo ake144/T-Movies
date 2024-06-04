@@ -57,7 +57,7 @@ const CustomLineChart = () => {
           <Line type="monotone" dataKey="E" stroke="#4daf4a" />
         </LineChart>
       </ResponsiveContainer>
-      <Box sx={{ ml: 1 }}>
+      <Box sx={{ ml: 1, width:{xs:'100px', sm:'250px', md:'auto'} }}>
         <Typography variant="h6" align="center" sx={{ mb: 1, backgroundColor: 'black', color: 'white', padding: '5px' }}>
           201<br />overall program
         </Typography>
@@ -65,7 +65,7 @@ const CustomLineChart = () => {
           {legendData.map((item) => (
             <ListItem key={item.name}>
               <ListItemIcon>
-                <Box sx={{ width: 24, height: 24, backgroundColor: item.color }} />
+                <Box sx={{ width: {md:'24px', xs:'15px', sm:'20px'}, height:  {md:'24px', xs:'15px', sm:'20px'}, backgroundColor: item.color }} />
               </ListItemIcon>
               <ListItemText primary={`${item.name}: ${item.value}`} />
             </ListItem>

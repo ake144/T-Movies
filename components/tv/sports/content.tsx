@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from 'react'
 import SportCard from './sportCard'
 import Header from './navBar'
-import { Grid, Paper,Box } from '@mui/material'
+import { Grid, Paper,Box,Typography } from '@mui/material'
 import { useSearchParams } from 'next/navigation'
 import { getSport } from  '@/utils/actions/createProgram' 
 import { MovieSchema } from '@/utils/types'
@@ -44,7 +44,9 @@ catch(error){
                 {loading ? (
                     <MediaSkeleton loading={true}/>
                 ) : sports.length === 0 ? (
-                    <p>No movies found</p>
+                  <Typography variant='h3'  sx={{ width:'100%', marginTop:'140px', padding:'80px', justifyContent:'center', alignItems:'center'}}>
+                    No Sport program found
+                  </Typography>
                 ) : (
                     sports.map((movie) => (
                     <Grid key={movie.id} item>        

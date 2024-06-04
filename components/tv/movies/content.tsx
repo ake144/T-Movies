@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from 'react'
 import HungerGameCard from './MovieCard'
 import Header from './navbar'
-import { Grid, Paper,Box } from '@mui/material'
+import { Grid, Paper,Box, Typography } from '@mui/material'
 import { useSearchParams } from 'next/navigation'
 import getMovies from  '@/utils/actions/fetchMovies' 
 import { MovieSchema } from '@/utils/types'
@@ -45,7 +45,9 @@ catch(error){
           {loading ? (
                  <MediaSkeleton loading={true}/>
               ) : movies.length === 0 ? (
-                <p>No movies found</p>
+                <Typography variant='h3'  sx={{ width:'100%', marginTop:'140px', padding:'80px', justifyContent:'center', alignItems:'center'}}>
+                  No movies found
+                </Typography>
               ) : (
                 movies.map((movie) => (
                   <Grid key={movie.id} item>        

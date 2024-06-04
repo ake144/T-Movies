@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from 'react'
 import TvShowCard from './favCard'
 import Header from './navBar'
-import { Grid, Paper,Box } from '@mui/material'
+import { Grid, Paper,Box, Typography } from '@mui/material'
 import { MovieSchema } from '@/utils/types'
 import { useSession } from 'next-auth/react'
 import MediaSkeleton from '@/components/skeleton'
@@ -46,7 +46,9 @@ function FavMovies() {
             {  Loading ? (
                <MediaSkeleton loading={true}/>
               ) : favMovie.length === 0 ? (
-                <p>No movies found</p>
+                <Typography variant='h3'  sx={{ width:'100%', marginTop:'140px', padding:'80px', justifyContent:'center', alignItems:'center'}}>
+                   No Favorite Program found
+              </Typography>
               ) : (
                 favMovie.map((movie) => (
                   <Grid key={movie.id} item>        
