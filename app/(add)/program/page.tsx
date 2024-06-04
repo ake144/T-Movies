@@ -44,7 +44,8 @@ const AddProgram = () => {
 
       const formData = {
         ...data,
-        duration: Number(data.duration)
+        duration: Number(data.duration),
+        imageUrl: data.imageUrl || null,
       };
 
       await createProgram(formData);
