@@ -13,8 +13,8 @@ import { signIn } from "next-auth/react";
 
 export function LoginPage() {
 
-  const searchParams = useSearchParams();
-  const callbackUrl = searchParams.get('callbackUrl') || '/';
+  // const searchParams = useSearchParams();
+  // const callbackUrl = searchParams.get('callbackUrl') || '/';
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -38,12 +38,11 @@ export function LoginPage() {
             redirect: false,
             email,
             password,
-            callbackUrl,
         });
      console.log('res', res)
 
       notifySuccess("Logged in successfully"); 
-      router.push(callbackUrl);
+      router.push('/admin');
       setEmail("");
       setPassword("");
     } catch (err:any) {
