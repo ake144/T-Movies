@@ -14,38 +14,34 @@ import {
   InputLabel
 } from '@mui/material';
 import { useForm, Controller, SubmitHandler } from 'react-hook-form';
-import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { createProgram } from '@/utils/actions/createProgram'; // Import the server action
 import { redirect, useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 import { toast, ToastContainer, Slide } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { ProgramSchemaType,ProgramSchema } from '@/utils/types';
+import { ProgramSchemaType, ProgramSchema } from '@/utils/types';
 import { categories, channels, types } from '@/utils/seed';
 
-
 const AddProgram = () => {
-
   const { data: session } = useSession({
     required: true,
     onUnauthenticated() {
-        redirect('/api/auth/signin?callbackUrl=/program')
+      redirect('/api/auth/signin?callbackUrl=/program');
     }
-  })
+  });
 
   const router = useRouter();
-  const { control, handleSubmit, formState: { errors },reset } = useForm<ProgramSchemaType>({
+  const { control, handleSubmit, formState: { errors }, reset } = useForm<ProgramSchemaType>({
     resolver: zodResolver(ProgramSchema)
   });
 
   const onSubmit: SubmitHandler<ProgramSchemaType> = async (data) => {
     try {
-
       const formData = {
         ...data,
         duration: Number(data.duration),
-        imageUrl: data.imageUrl || null,
+        imageUrl: data.imageUrl || undefined
       };
 
       await createProgram(formData);
@@ -54,9 +50,9 @@ const AddProgram = () => {
         autoClose: 5000,
         transition: Slide,
       });
-      console.log('Program created successfully');
+      console.log('Program created successfully', formData);
       reset();
-    } catch (error:any) {
+    } catch (error: any) {
       toast.error(error.message, {
         position: 'top-right',
         autoClose: 5000,
@@ -78,13 +74,11 @@ const AddProgram = () => {
         p: 3,
       }}
     >
-      
-
       <Paper sx={{ padding: 3 }}>
         <form onSubmit={handleSubmit(onSubmit)}>
-        <Typography variant="h3" sx={{ textAlign: 'center', fontWeight: 'bold', mb: 3 }}>
-        Add Program
-      </Typography>
+          <Typography variant="h3" sx={{ textAlign: 'center', fontWeight: 'bold', mb: 3 }}>
+            Add Program
+          </Typography>
           <Grid container spacing={2}>
             <Grid item xs={12} sm={6}>
               <Typography variant='caption' sx={{ textAlign: 'center', mb: 3 }}>
@@ -229,8 +223,7 @@ const AddProgram = () => {
                 )}
               />
             </Grid>
-         
-          <Grid item xs={12} sm={6}>
+            <Grid item xs={12} sm={6}>
               <Typography variant='caption' sx={{ textAlign: 'center', mb: 3 }}>
                 Image URL
               </Typography>
@@ -249,7 +242,7 @@ const AddProgram = () => {
                 )}
               />
             </Grid>
-            </Grid>
+          </Grid>
           <Box
             sx={{
               display: 'flex',
@@ -278,6 +271,7 @@ const AddProgram = () => {
           </Box>
         </form>
       </Paper>
+      <ToastContainer />
     </Box>
   );
 };

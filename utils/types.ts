@@ -1,10 +1,9 @@
 
-import { number, object, string } from "zod"
+import {  object, string } from "zod"
 
 import { z } from 'zod';
 
 export const ProgramSchema = z.object({
-  id: z.number(),
   title: z.string().min(1, 'Title is required'),
   duration: z.number().positive('Duration must be a positive number'),
   description: z.string().min(5, 'Description is required'),
@@ -12,10 +11,11 @@ export const ProgramSchema = z.object({
   channelId: z.number().min(1, 'Channel is required'),
   typeId: z.number().min(1, 'Type is required'),
   categoryId: z.number().min(1, 'Category is required'),
-  imageUrl:z.string().optional()
+  imageUrl: z.string().optional()
 });
 
 export type ProgramSchemaType = z.infer<typeof ProgramSchema>;
+
 
 
  

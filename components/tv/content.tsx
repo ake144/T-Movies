@@ -24,9 +24,8 @@ const Content = () => {
           <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', padding: 2 }}>
             <Header />
             <>
-              <Typography variant="h6">Let us shine your day</Typography>
-              <Typography variant="h6" sx={{ color: '#ff5722', mb: 1 }}>🎬 </Typography>
-              <Typography variant="h6" sx={{ color: '#ff5722', mb: 1 }}>⚽</Typography>
+              <Typography variant="h5">Transform Your Daylight Experience</Typography>
+
             </>
           </Box>
           <Box sx={{ marginTop: 'auto', padding: 2 }}>

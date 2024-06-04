@@ -39,6 +39,7 @@ function AddChannel() {
       notifySuccess("channel Added successfully"); 
       console.log('Channel added:', data.channelName);
       setChannelName('')
+      router.push('/admin/channel');
     } catch (error: any) { 
       console.error('Error:', error);
       notifyError(error.message);

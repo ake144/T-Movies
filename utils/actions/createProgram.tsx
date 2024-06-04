@@ -3,30 +3,30 @@
 
 import prisma from "@/lib/db"
 import { MovieSchema } from "@/utils/types"
+import { ProgramSchemaType } from "@/utils/types";
 
 
 
-export async function createProgram(data:MovieSchema) {
-  try{
-    const program:MovieSchema = await prisma.movie.create({
-        data:{
-            title:data.title,
-            duration : data.duration,
-            description: data.description,
-            channelId:data.channelId,
-            typeId:data.typeId,
-            categoryId: data.categoryId,
-            videoUrl: data.videoUrl
+export async function createProgram(data: ProgramSchemaType) {
+    try {
+      const program = await prisma.movie.create({
+        data: {
+          title: data.title,
+          duration: data.duration,
+          description: data.description,
+          channelId: data.channelId,
+          typeId: data.typeId,
+          categoryId: data.categoryId,
+          videoUrl: data.videoUrl,
+          imageUrl: data.imageUrl || undefined,
         }
-    })
-    console.log("movies created", program)
+      });
+      console.log("Program created", program);
+    } catch (error) {
+      console.log("Error creating program", error);
+      throw new Error("Error creating program");
+    }
   }
-  catch(error){
-    console.log("Error creating program", error)
-    throw new Error("error creating program" )
-  }
-    
-}
 
 export async function fetchPrograms(query: {  page?: number, limit?: number, sortField?: string, sortOrder?: 'asc' | 'desc' }) {
     const { page = 1, limit = 10, sortField = 'title', sortOrder = 'asc' } = query;
