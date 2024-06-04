@@ -42,7 +42,7 @@ export function LoginPage() {
      console.log('res', res)
 
       notifySuccess("Logged in successfully"); 
-      router.push('/admin');
+      router.push('/tv');
       setEmail("");
       setPassword("");
     } catch (err:any) {
