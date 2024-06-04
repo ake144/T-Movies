@@ -22,7 +22,7 @@ function page() {
             height="100%"
             sx={{ paddingLeft: '17%' }}
           >
-            <img src="/logo.png" alt="logo" width="150" height="100" />
+            <img src="/Logo.png" alt="logo" width="150" height="100" />
            
             <Typography
               sx={{ fontFamily: 'sans', color: 'white' }}
